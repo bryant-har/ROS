@@ -67,7 +67,7 @@ class KinematicCarMotionModel:
             M x 3 np.array, where the three columns are dx, dy, dtheta
 
         """
-        # BEGIN  "QUESTION 1.2" ALT="return np.zeros_like(states, dtype=float)"
+        # BEGIN "QUESTION 1.2" ALT="return np.zeros_like(states, dtype=float)"
 
         res = np.zeros(states.shape)
         res[:, 0] = np.dot(controls[:, 0], dt*np.cos(states[:, 2]))
@@ -78,7 +78,7 @@ class KinematicCarMotionModel:
                                   dt*np.tan(controls[:, 1]))
         resnonzero[:, 0] = np.dot((self.car_length)/np.tan(controls[:, 1]),
                                   (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
-        resnonzero[:, 1] = np.dot((self.car_length)/np.tan(controls[1]),
+        resnonzero[:, 1] = np.dot((self.car_length)/np.tan(controls[:, 1]),
                                   (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
         return np.where(np.abs(controls[:, 1]) < alpha_threshold, res, resnonzero)
         # END
