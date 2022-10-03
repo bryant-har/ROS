@@ -9,10 +9,19 @@ $x_t$ derivation:
 $$
 \begin{align*}
 &\int_{x_{t-1}}^{x_t} dx =\int_{t}^{t+ \Delta t} v \cos \theta dt  \\
-&x_{t}-x{t-1}=\int_{\theta_{t-1}}^{\theta_t} \frac{L}{\tan \alpha} \cos \theta d\theta\\
-&x_{t}-x{t-1}=\frac{L}{\tan \alpha} (\cos \theta_{t}-\cos \theta_{t-1})\\
+&x_{t}-x_{t-1}=\int_{\theta_{t-1}}^{\theta_t} \frac{L}{\tan \alpha} \cos \theta d\theta\\
+&x_{t}-x_{t-1}=\frac{L}{\tan \alpha} (\sin \theta_{t}-\sin \theta_{t-1})\\
+&x_{t}=x_{t-1}+\frac{L}{\tan \alpha} (\sin (\theta_{t-1}+\frac{v}{L} \tan \alpha \Delta t)-\sin \theta_{t-1})
 \end{align*}
 $$
 
+$y_t$ derivation:
 
-
+$$
+\begin{align*}
+&\int_{y_{t-1}}^{y_t} dx =\int_{t}^{t+ \Delta t} v \sin \theta dt  \\
+&y_{t}-y_{t-1}=\int_{\theta_{t-1}}^{\theta_t} \frac{L}{\tan \alpha} \sin \theta d\theta\\
+&y_{t}-y_{t-1}=\frac{L}{\tan \alpha} (\cos \theta_{t-1}-\cos \theta_{t})\\
+&y_{t}=y_{t-1}+\frac{L}{\tan \alpha} (\cos \theta_{t-1}-\cos (\theta_{t-1}+\frac{v}{L} \tan \alpha \Delta t))
+\end{align*}
+$$
