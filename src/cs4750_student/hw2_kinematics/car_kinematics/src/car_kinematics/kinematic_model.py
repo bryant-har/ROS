@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from __future__ import division
+from cmath import cos, sin, tan
 from threading import Lock
 import numpy as np
 from numpy.core.numeric import roll
@@ -67,7 +68,22 @@ class KinematicCarMotionModel:
 
         """
         # BEGIN "QUESTION 1.2" ALT="return np.zeros_like(states, dtype=float)"
-        
+        data = np.hstack((states, controls))
+
+        def process(row):
+            if row[4] < alpha_threshold:
+                dx = row[3]*cos(row[2])*dt
+                dy = row[3]*sin(row[2])*dt
+                dtheta = 0
+            else:
+                dx = (self.car_length/tan(row[4])) * \
+                    (sin(row[2]+dtheta)-sin(row[2]))
+                dy = (self.car_length/tan(row[4])) * \
+                    (cos(row[2])-cos(row[2]+dtheta))
+                dtheta = (row[3]/self.car_length)*dt*tan(row[4])
+            return np.array([dx, dy, dtheta])
+
+        return np.apply_along_axis(process, 1, data)
         # END
 
     def apply_deterministic_motion_model(self, states, vel, alpha, dt):
@@ -95,7 +111,7 @@ class KinematicCarMotionModel:
 
         # Hint: use same controls for all the particles
         # BEGIN SOLUTION "QUESTION 1.3"
-        
+
         # END SOLUTION
 
     def apply_motion_model(self, states, vel, alpha, dt):
@@ -123,5 +139,5 @@ class KinematicCarMotionModel:
 
         # Hint: you may find the np.random.normal function useful
         # BEGIN SOLUTION "QUESTION 1.4"
-        
+
         # END SOLUTION
