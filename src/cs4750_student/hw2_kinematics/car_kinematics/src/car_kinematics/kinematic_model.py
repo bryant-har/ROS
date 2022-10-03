@@ -67,7 +67,7 @@ class KinematicCarMotionModel:
             M x 3 np.array, where the three columns are dx, dy, dtheta
 
         """
-        # BEGIN "QUESTION 1.2" ALT="return np.zeros_like(states, dtype=float)"
+        # BEGIN  "QUESTION 1.2" ALT="return np.zeros_like(states, dtype=float)"
 
         res = np.zeros(states.shape)
         res[:, 0] = np.dot(controls[:, 0], dt*np.cos(states[:, 2]))
