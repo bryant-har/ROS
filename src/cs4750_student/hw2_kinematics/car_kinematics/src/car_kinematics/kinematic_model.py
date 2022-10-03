@@ -68,19 +68,19 @@ class KinematicCarMotionModel:
 
         """
         # BEGIN "QUESTION 1.2" ALT="return np.zeros_like(states, dtype=float)"
-
+        zeros = np.where(np.abs(controls[:, 1]) < alpha_threshold)
+        nonzeros = np.where(np.abs(controls[:, 1] >= alpha_threshold))
         res = np.zeros(states.shape)
-        res[:, 0] = np.dot(controls[:, 0], dt*np.cos(states[:, 2]))
-        res[:, 1] = np.dot(controls[:, 0], dt*np.sin(states[:, 2]))
+        res[zeros, 0] = np.dot(controls[:, 0], dt*np.cos(states[:, 2]))
+        res[zeros, 1] = np.dot(controls[:, 0], dt*np.sin(states[:, 2]))
 
-        resnonzero = np.zeros(states.shape)
-        resnonzero[:, 2] = np.dot(controls[:, 0]/self.car_length,
+        res[nonzeros, 2] = np.dot(controls[:, 0]/self.car_length,
                                   dt*np.tan(controls[:, 1]))
-        resnonzero[:, 0] = np.dot((self.car_length)/np.tan(controls[:, 1]),
+        res[nonzeros, 0] = np.dot((self.car_length)/np.tan(controls[:, 1]),
                                   (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
-        resnonzero[:, 1] = np.dot((self.car_length)/np.tan(controls[:, 1]),
+        res[nonzeros, 1] = np.dot((self.car_length)/np.tan(controls[:, 1]),
                                   (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
-        return np.where(np.abs(controls[:, 1]) < alpha_threshold, res, resnonzero)
+        return res
         # END
 
     def apply_deterministic_motion_model(self, states, vel, alpha, dt):
