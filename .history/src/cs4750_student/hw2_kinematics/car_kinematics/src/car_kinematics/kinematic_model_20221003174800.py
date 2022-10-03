@@ -68,19 +68,19 @@ class KinematicCarMotionModel:
 
         """
         # BEGIN "QUESTION 1.2" ALT="return np.zeros_like(states, dtype=float)"
-
         res = np.zeros(states.shape)
-        res[:, 0] = np.dot(controls[:, 0], dt*np.cos(states[:, 2]))
-        res[:, 1] = np.dot(controls[:, 0], dt*np.sin(states[:, 2]))
 
-        resnonzero = np.zeros(states.shape)
-        resnonzero[:, 2] = np.dot(controls[0]/self.car_length,
-                                  dt*np.tan(controls[1]))
-        resnonzero[:, 0] = np.dot((self.car_length)/np.tan(controls[1]),
-                                  (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
-        resnonzero[:, 1] = np.dot((self.car_length)/np.tan(controls[1]),
-                                  (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
-        return np.where(np.abs(controls[1]) < alpha_threshold, res, resnonzero)
+        if controls[1] < alpha_threshold:
+            res[:, 0] = np.dot(controls[:, 0], dt*np.cos(states[:, 2]))
+            res[:, 1] = np.dot(controls[:, 0], dt*np.sin(states[:, 2]))
+        else:
+            res[:, 2] = np.dot(controls[0]/self.car_length,
+                               dt*np.tan(controls[1]))
+            res[:, 0] = np.dot((self.car_length)/np.tan(controls[1]),
+                               (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
+            res[:, 1] = np.dot((self.car_length)/np.tan(controls[1]),
+                               (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
+        return res
         # END
 
     def apply_deterministic_motion_model(self, states, vel, alpha, dt):
@@ -108,6 +108,21 @@ class KinematicCarMotionModel:
 
         # Hint: use same controls for all the particles
         # BEGIN SOLUTION "QUESTION 1.3"
+        res = np.zeros(states.shape)
+
+        if controls[1] < alpha_threshold:
+            states[:, 0] = vel * dt*np.cos(states[:, 2])
+            states[:, 1] = vel*dt*np.sin(states[:, 2])
+            states[:, 2] = np.zeros((states))
+        else:
+            state[:, 2] = vel/self.car_length*
+            dt*np.tan(controls[1])
+            res[:, 0] = np.dot((self.car_length)/np.tan(controls[1]),
+                               (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
+            res[:, 1] = np.dot((self.car_length)/np.tan(controls[1]),
+                               (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
+        return res
+
         # END SOLUTION
 
     def apply_motion_model(self, states, vel, alpha, dt):
