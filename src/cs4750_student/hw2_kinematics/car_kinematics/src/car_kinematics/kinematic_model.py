@@ -74,13 +74,13 @@ class KinematicCarMotionModel:
         res[:, 1] = np.dot(controls[:, 0], dt*np.sin(states[:, 2]))
 
         resnonzero = np.zeros(states.shape)
-        resnonzero[:, 2] = np.dot(controls[0]/self.car_length,
-                                  dt*np.tan(controls[1]))
-        resnonzero[:, 0] = np.dot((self.car_length)/np.tan(controls[1]),
+        resnonzero[:, 2] = np.dot(controls[:, 0]/self.car_length,
+                                  dt*np.tan(controls[:, 1]))
+        resnonzero[:, 0] = np.dot((self.car_length)/np.tan(controls[:, 1]),
                                   (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
         resnonzero[:, 1] = np.dot((self.car_length)/np.tan(controls[1]),
                                   (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
-        return np.where(np.abs(controls[1]) < alpha_threshold, res, resnonzero)
+        return np.where(np.abs(controls[:, 1]) < alpha_threshold, res, resnonzero)
         # END
 
     def apply_deterministic_motion_model(self, states, vel, alpha, dt):
