@@ -80,7 +80,8 @@ class KinematicCarMotionModel:
                                (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
             res[:, 1] = np.dot((self.car_length)/np.tan(controls[1]),
                                (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
-        return res        # END
+        return res
+        # END
 
     def apply_deterministic_motion_model(self, states, vel, alpha, dt):
         """Propagate states through the determistic kinematic car motion model.
