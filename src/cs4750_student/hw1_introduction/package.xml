@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>introduction</name>
+  <version>1.0.0</version>
+  <description>CS4750 Introduction Project</description>
+
+  <author>Fanjun Bu</author>
+  <author>Rishabh Madan</author>
+
+  <maintainer email="fb266@cornell.edu">Cornell CS Robotics Teaching Staff</maintainer>
+
+  <url>https://mushr.io/</url>
+
+  <license>Educational Use Only</license>
+
+  <test_depend>roslaunch</test_depend>
+  <test_depend>rosunit</test_depend> <!-- rosunit test -->
+  <test_depend>rostest</test_depend> <!-- rostest -->
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rospy</build_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <exec_depend>cs4750</exec_depend>
+  <exec_depend>map_server</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>tf_conversions</exec_depend>
+  <exec_depend>ackermann_msgs</exec_depend>
+
+  <export>
+
+  </export>
+</package>

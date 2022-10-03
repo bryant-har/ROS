@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+
+import numpy as np
+import matplotlib.pyplot as plt
+import time
+import os
+
+from car_kinematics.kinematic_model import KinematicCarMotionModel
+from numpy.core.numeric import roll
+
+# Set up the plot
+fig = plt.figure()
+plt.title('Deterministic rollouts \nGoing straight, Turning left and Turning right')
+plt.suptitle('(Plot generated at {})'.format(int(time.time())), fontsize=8, x=0.85, y=0.02)
+
+plt.xlabel("x (m)")
+plt.ylabel("y (m)")
+plt.ylim(bottom=-0.45)
+plt.xlim(left=-0.03)
+plt.ylim(top=0.45)
+plt.xlim(right=0.7)
+
+
+def plot_noiseless_kinematic_model(rollout, motion_model, radius=0.1):
+    """Visualize the deterministic kinematics model.
+
+    The initial state is visualized with a green arrow. The resulting rollouts are
+    visualized with a red arrow.
+
+    Args:
+        rollout: sequence of states to be visualized
+        motion_model: Motion model being visualized
+        noiseless_state: Noiseless kinematic car model prediction (optional)
+        radius: Distance to count particles around the noiseless state
+    """
+
+    arrow_thickness = 0.1
+    noiseless_state = rollout[0]
+    gt_x, gt_y, gt_theta = noiseless_state
+    plt.quiver(
+        gt_x,
+        gt_y,
+        arrow_thickness * np.cos(gt_theta),
+        arrow_thickness * np.sin(gt_theta),
+        color="g",
+    )
+
+    for i in range(3, len(rollout) - 1):
+        noiseless_state = rollout[i]
+        gt_x, gt_y, gt_theta = noiseless_state
+        plt.scatter(gt_x, gt_y, c='#FF7F7F')
+
+    noiseless_state = rollout[len(rollout) - 1]
+    gt_x, gt_y, gt_theta = noiseless_state
+    plt.quiver(
+        gt_x,
+        gt_y,
+        arrow_thickness * np.cos(gt_theta),
+        arrow_thickness * np.sin(gt_theta),
+        color="r",
+    )
+
+
+if __name__ == '__main__':
+    car_length = 0.33
+    motion_model = KinematicCarMotionModel(car_length)
+    rollout_size = 30
+
+    state_straight = np.zeros((1, 3))
+    state_left = np.zeros((1, 3))
+    state_right = np.zeros((1, 3))
+
+    rollout_straight = np.zeros((rollout_size + 1, 3))
+    rollout_left = np.zeros((rollout_size + 1, 3))
+    rollout_right = np.zeros((rollout_size + 1, 3))
+
+    dt = 0.02
+    for i in range(rollout_size):
+        motion_model.apply_deterministic_motion_model(
+            state_straight, 1.0, 0., dt)
+        motion_model.apply_deterministic_motion_model(
+            state_left, 1.0, 0.7, dt)
+        motion_model.apply_deterministic_motion_model(
+            state_right, 1.0, -0.7, dt)
+        rollout_straight[i+1] = state_straight
+        rollout_left[i+1] = state_left
+        rollout_right[i+1] = state_right
+
+    plot_noiseless_kinematic_model(rollout_straight, motion_model)
+    plot_noiseless_kinematic_model(rollout_left, motion_model)
+    plot_noiseless_kinematic_model(rollout_right, motion_model)
+
+    plt.show()

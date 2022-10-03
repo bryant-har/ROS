@@ -1,0 +1,24 @@
+[36m--[0m Using CATKIN_DEVEL_PREFIX: /home/bjh254/homework_ws/devel/.private/introduction
+[36m--[0m Using CMAKE_PREFIX_PATH: /home/bjh254/homework_ws/devel;/home/bjh254/dependencies_ws/devel;/home/bjh254/interbotix_ws/devel;/opt/ros/noetic
+[36m--[0m This workspace overlays: /home/bjh254/homework_ws/devel;/home/bjh254/dependencies_ws/devel;/home/bjh254/interbotix_ws/devel;/opt/ros/noetic
+[36m--[0m Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3")
+[36m--[0m Using PYTHON_EXECUTABLE: /usr/bin/python3
+[36m--[0m Using Debian Python package layout
+[36m--[0m Using empy: /usr/lib/python3/dist-packages/em.py
+[36m--[0m Using CATKIN_ENABLE_TESTING: ON
+[36m--[0m Call enable_testing()
+[36m--[0m Using CATKIN_TEST_RESULTS_DIR: /home/bjh254/homework_ws/build/introduction/test_results
+[36m--[0m Forcing gtest/gmock from source, though one was otherwise available.
+[36m--[0m Found gtest sources under '/usr/src/googletest': gtests will be built
+[36m--[0m Found gmock sources under '/usr/src/googletest': gmock will be built
+[36m--[0m Found PythonInterp: /usr/bin/python3 (found version "3.8.10")
+[36m--[0m Using Python nosetests: /usr/bin/nosetests3
+[36m--[0m catkin 0.8.10
+[36m--[0m BUILD_SHARED_LIBS is on
+[36m--[0m Installing devel-space wrapper /home/bjh254/homework_ws/src/cs4750_student/hw1_introduction/scripts/prime_number to /home/bjh254/homework_ws/devel/.private/introduction/lib/introduction
+[36m--[0m Installing devel-space wrapper /home/bjh254/homework_ws/src/cs4750_student/hw1_introduction/scripts/compare_norm to /home/bjh254/homework_ws/devel/.private/introduction/lib/introduction
+[36m--[0m Installing devel-space wrapper /home/bjh254/homework_ws/src/cs4750_student/hw1_introduction/scripts/path_publisher to /home/bjh254/homework_ws/devel/.private/introduction/lib/introduction
+[36m--[0m Installing devel-space wrapper /home/bjh254/homework_ws/src/cs4750_student/hw1_introduction/scripts/pose_listener to /home/bjh254/homework_ws/devel/.private/introduction/lib/introduction
+[36m--[0m Configuring done
+[36m--[0m Generating done
+[36m--[0m Build files have been written to: /home/bjh254/homework_ws/build/introduction

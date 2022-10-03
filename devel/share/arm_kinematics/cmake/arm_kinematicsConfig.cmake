@@ -1,0 +1,1 @@
+/home/bjh254/homework_ws/devel/.private/arm_kinematics/share/arm_kinematics/cmake/arm_kinematicsConfig.cmake

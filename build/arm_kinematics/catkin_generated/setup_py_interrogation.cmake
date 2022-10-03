@@ -1,0 +1,7 @@
+set(arm_kinematics_SETUP_PY_SETUP_MODULE "setuptools")
+set(arm_kinematics_SETUP_PY_VERSION "0.0.0")
+set(arm_kinematics_SETUP_PY_SCRIPTS "")
+set(arm_kinematics_SETUP_PY_PACKAGES "arm_kinematics")
+set(arm_kinematics_SETUP_PY_PACKAGE_DIRS "src/arm_kinematics")
+set(arm_kinematics_SETUP_PY_MODULES "")
+set(arm_kinematics_SETUP_PY_MODULE_DIRS "")

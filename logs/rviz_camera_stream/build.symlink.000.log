@@ -1,0 +1,4 @@
+Symlinking /home/bjh254/homework_ws/devel/lib/librviz_camera_stream.so
+Symlinking /home/bjh254/homework_ws/devel/lib/pkgconfig/rviz_camera_stream.pc
+Symlinking /home/bjh254/homework_ws/devel/share/rviz_camera_stream/cmake/rviz_camera_streamConfig.cmake
+Symlinking /home/bjh254/homework_ws/devel/share/rviz_camera_stream/cmake/rviz_camera_streamConfig-version.cmake

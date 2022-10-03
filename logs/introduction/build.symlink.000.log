@@ -1,0 +1,9 @@
+Symlinking /home/bjh254/homework_ws/devel/lib/pkgconfig/introduction.pc
+Symlinking /home/bjh254/homework_ws/devel/lib/python3/dist-packages/introduction/__init__.py
+Symlinking /home/bjh254/homework_ws/devel/lib/introduction/cmake.lock
+Symlinking /home/bjh254/homework_ws/devel/lib/introduction/prime_number
+Symlinking /home/bjh254/homework_ws/devel/lib/introduction/compare_norm
+Symlinking /home/bjh254/homework_ws/devel/lib/introduction/path_publisher
+Symlinking /home/bjh254/homework_ws/devel/lib/introduction/pose_listener
+Symlinking /home/bjh254/homework_ws/devel/share/introduction/cmake/introductionConfig.cmake
+Symlinking /home/bjh254/homework_ws/devel/share/introduction/cmake/introductionConfig-version.cmake

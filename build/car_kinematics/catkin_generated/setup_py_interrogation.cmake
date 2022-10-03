@@ -1,0 +1,7 @@
+set(car_kinematics_SETUP_PY_SETUP_MODULE "setuptools")
+set(car_kinematics_SETUP_PY_VERSION "1.0.0")
+set(car_kinematics_SETUP_PY_SCRIPTS "")
+set(car_kinematics_SETUP_PY_PACKAGES "car_kinematics")
+set(car_kinematics_SETUP_PY_PACKAGE_DIRS "src/car_kinematics")
+set(car_kinematics_SETUP_PY_MODULES "")
+set(car_kinematics_SETUP_PY_MODULE_DIRS "")

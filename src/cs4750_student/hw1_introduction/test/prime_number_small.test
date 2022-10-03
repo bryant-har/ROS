@@ -1,0 +1,7 @@
+<launch>
+  <node pkg="introduction" type="prime_number" name="prime_number">
+    <param name="test_number" value="7.0" />
+    <param name="output_topic" value="/introduction/prime_number_output" />
+  </node>
+  <test test-name="test_prime_number_small" pkg="introduction" type="test_prime_number_small.py"/>
+</launch>

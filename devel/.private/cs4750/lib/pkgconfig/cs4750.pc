@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/devel/.private/cs4750
+
+Name: cs4750
+Description: Description of cs4750
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

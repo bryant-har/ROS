@@ -1,0 +1,6 @@
+devel_space: /home/bjh254/homework_ws/devel
+install: false
+install_space: /home/bjh254/homework_ws/install
+profile: default
+source_space: /home/bjh254/homework_ws/src
+workspace: /home/bjh254/homework_ws

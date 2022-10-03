@@ -1,0 +1,7 @@
+set(introduction_SETUP_PY_SETUP_MODULE "setuptools")
+set(introduction_SETUP_PY_VERSION "1.0.0")
+set(introduction_SETUP_PY_SCRIPTS "")
+set(introduction_SETUP_PY_PACKAGES "introduction")
+set(introduction_SETUP_PY_PACKAGE_DIRS "src/introduction")
+set(introduction_SETUP_PY_MODULES "")
+set(introduction_SETUP_PY_MODULE_DIRS "")

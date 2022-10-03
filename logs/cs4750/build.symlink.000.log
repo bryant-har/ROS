@@ -1,0 +1,6 @@
+Symlinking /home/bjh254/homework_ws/devel/lib/pkgconfig/cs4750.pc
+Symlinking /home/bjh254/homework_ws/devel/lib/python3/dist-packages/cs4750/__init__.py
+Symlinking /home/bjh254/homework_ws/devel/share/cs4750/cmake/cs4750Config.cmake
+Symlinking /home/bjh254/homework_ws/devel/share/cs4750/cmake/cs4750Config-version.cmake
+Symlinking /home/bjh254/homework_ws/devel/etc/catkin/profile.d/cs4750.bash
+Symlinking /home/bjh254/homework_ws/devel/etc/catkin/profile.d/cs4750.zsh

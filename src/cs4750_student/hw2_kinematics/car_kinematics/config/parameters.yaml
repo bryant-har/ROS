@@ -1,0 +1,8 @@
+motion_params:
+  vel_std:    0.05
+  alpha_std:  0.5
+  x_std:      0.05
+  y_std:      0.05
+  theta_std:  0.05
+
+
