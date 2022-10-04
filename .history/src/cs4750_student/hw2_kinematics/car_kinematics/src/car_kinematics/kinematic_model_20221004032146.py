@@ -170,12 +170,13 @@ class KinematicCarMotionModel:
         noisyalp = np.random.normal(alpha, self.alpha_std, n_particles)
         newcontrol = np.vstack((noisyvel, noisyalp)).T
 
-        changes = self.compute_changes(states, newcontrol, dt)
+        noisyx = np.random.normal(0, self.x_std, n_particles)
+        noisyy = np.random.normal(0, self.y_std, n_particles)
+        noisyt = np.random.normal(0, self.theta_std, n_particles)
+        noisepos = np.vstack((noisyx, noisyy, noisyt)).T
 
-        stds = np.array([self.x_std, self.y_std, self.theta_std])
-        noisychanges = np.random.normal(changes, stds)
-
-        states[:] = states[:] + noisychanges
+        states[:] = states[:] + \
+            self.compute_changes(states, newcontrol, dt) + noisepos
 
         def reduce(theta):
             theta = theta % (2*np.pi)
