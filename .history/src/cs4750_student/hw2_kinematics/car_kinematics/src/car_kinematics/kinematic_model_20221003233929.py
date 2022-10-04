@@ -73,15 +73,15 @@ class KinematicCarMotionModel:
         nonzeros = np.where(np.abs(controls[:, 1] >= alpha_threshold))
         res = np.zeros(states.shape)
 
-        res[zeros, 0] = np.matmul(controls[:, 0], dt*np.cos(states[:, 2]))
-        res[zeros, 1] = np.matmul(controls[:, 0], dt*np.sin(states[:, 2]))
+        res[zeros, 0] = np.dot(controls[:, 0], dt*np.cos(states[:, 2]))
+        res[zeros, 1] = np.dot(controls[:, 0], dt*np.sin(states[:, 2]))
 
-        res[nonzeros, 2] = np.matmul(controls[:, 0]/self.car_length,
-                                     dt*np.tan(controls[:, 1]))
-        res[nonzeros, 0] = np.matmul((self.car_length)/np.tan(controls[:, 1]),
-                                     (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
-        res[nonzeros, 1] = np.matmul((self.car_length)/np.tan(controls[:, 1]),
-                                     (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
+        res[nonzeros, 2] = np.dot(controls[:, 0]/self.car_length,
+                                  dt*np.tan(controls[:, 1]))
+        res[nonzeros, 0] = np.dot((self.car_length)/np.tan(controls[:, 1]),
+                                  (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
+        res[nonzeros, 1] = np.dot((self.car_length)/np.tan(controls[:, 1]),
+                                  (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
         return res
         # END
 
