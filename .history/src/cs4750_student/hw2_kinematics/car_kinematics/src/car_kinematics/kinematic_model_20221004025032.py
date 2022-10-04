@@ -170,7 +170,7 @@ class KinematicCarMotionModel:
             (np.random.normal(vel, self.vel_std, n_particles), np.random.normal(alpha, self.alpha_std, n_particles)))
 
         changes = self.compute_changes(states, noisycontrol.T, dt)
-        noisychanges = states + changes + np.vstack(
+        noisychanges = changes + np.vstack(
             ((np.random.normal(0, self.x_std, n_particles)), (np.random.normal(
                 0, self.y_std, n_particles)), (np.random.normal(0, self.theta_std, n_particles)))
         ).T
