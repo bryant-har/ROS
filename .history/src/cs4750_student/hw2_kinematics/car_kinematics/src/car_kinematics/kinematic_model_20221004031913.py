@@ -173,7 +173,7 @@ class KinematicCarMotionModel:
         noisyx = np.random.normal(0, self.x_std, n_particles)
         noisyy = np.random.normal(0, self.y_std, n_particles)
         noisyt = np.random.normal(0, self.theta_std, n_particles)
-        noisepos = np.vstack((noisyx, noisyy, noisyt)).T
+        noisepos = np.vstack((noisyx, noisyy, noisyt))
 
         states[:] = states[:] + \
             self.compute_changes(states, newcontrol, dt) + noisepos
