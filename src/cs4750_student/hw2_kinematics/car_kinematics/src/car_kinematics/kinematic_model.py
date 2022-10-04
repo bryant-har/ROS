@@ -112,10 +112,10 @@ class KinematicCarMotionModel:
 
         def reduce(theta):
             theta = theta % (2*math.pi)
-            theta = (theta + math.pi) % (2*math.pi)
+            theta = (theta + 2*math.pi) % (2*math.pi)
             theta2 = theta - 2*math.pi
 
-            return np.where(theta < math.pi, theta2, theta)
+            return np.where(theta < math.pi, theta, theta2)
 
         if abs(alpha) < 1e-2:
             states[:, 0] = states[:, 0] + vel*dt*np.cos(states[:, 2])
