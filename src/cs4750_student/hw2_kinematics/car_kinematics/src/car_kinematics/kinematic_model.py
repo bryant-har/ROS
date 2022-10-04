@@ -120,6 +120,7 @@ class KinematicCarMotionModel:
         if abs(alpha) < 1e-2:
             states[:, 0] = states[:, 0] + vel*dt*np.cos(states[:, 2])
             states[:, 1] = states[:, 1] + vel*dt*np.sin(states[:, 2])
+            states[:, 2] = reduce(states[:, 2])
         else:
             oldtheta = states[:, 2]
             states[:, 2] = reduce(
