@@ -129,14 +129,14 @@ class KinematicCarMotionModel:
             states[:, 1] = states[:, 1] + vel*dt*np.sin(states[:, 2])
             states[:, 2] = reduce(states[:, 2])
         else:
-            states[:, 0] = (self.car_length/np.tan(alpha)) * \
+            states[:, 0] = states[:, 0]+(self.car_length/np.tan(alpha)) * \
                 (np.sin(states[:, 2] + (vel/self.car_length)
                  * dt*np.tan(alpha))-np.sin(states[:, 2]))
-            states[:, 1] = (self.car_length/np.tan(alpha)) * \
+            states[:, 1] = states[:, 1] + (self.car_length/np.tan(alpha)) * \
                 (np.cos(states[:, 2])-np.cos(states[:, 2] +
                  (vel/self.car_length) * dt*np.tan(alpha)))
             states[:, 2] = reduce(
-                states[:, 2] + (vel/self.car_length) * dt*np.tan(alpha))
+                states[:, 2] + (vel/self.car_length) * dt * np.tan(alpha))
 
         return
         # END SOLUTION
