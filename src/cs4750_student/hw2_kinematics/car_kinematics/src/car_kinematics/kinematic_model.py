@@ -165,11 +165,34 @@ class KinematicCarMotionModel:
 
         # Hint: you may find the np.random.normal function useful
         # BEGIN SOLUTION "QUESTION 1.4"
-        m = 100
+
+        def reduce(theta):
+            theta = theta % (2*np.pi)
+            theta = (theta + 2*np.pi) % (2*np.pi)
+            theta2 = theta - 2*np.pi
+
+            return np.where(theta <= np.pi, theta, theta2)
+
+        if abs(alpha) < 1e-2:
+            states[:, 0] = states[:, 0] + vel*dt*np.cos(states[:, 2])
+            states[:, 1] = states[:, 1] + vel*dt*np.sin(states[:, 2])
+            states[:, 2] = states[:, 2]
+        else:
+            states[:, 0] = states[:, 0]+(self.car_length/np.tan(alpha)) * \
+                (np.sin(states[:, 2] + (vel/self.car_length)
+                 * dt*np.tan(alpha))-np.sin(states[:, 2]))
+            states[:, 1] = states[:, 1] + (self.car_length/np.tan(alpha)) * \
+                (np.cos(states[:, 2])-np.cos(states[:, 2] +
+                 (vel/self.car_length) * dt*np.tan(alpha)))
+            states[:, 2] = states[:, 2] + \
+                (vel/self.car_length) * dt * np.tan(alpha)
+        states[:, 2] = reduce(states[:, 2])
+
+        m = states.shape[0]
         noisycontrol = np.vstack(
             (vel+np.random.normal(0, self.vel_std, m), alpha+np.random.normal(0, self.alpha_std, m)))
 
-        states = self.compute_changes(states, noisycontrol.T, dt)
+        states = states+fself.compute_changes(states, noisycontrol.T, dt)
         states[:, 0] += np.random.normal(0, self.x_std, m)
         states[:, 1] += np.random.normal(0, self.y_std, m)
         states[:, 2] += np.random.normal(0, self.theta_std, m)
