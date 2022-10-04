@@ -166,13 +166,8 @@ class KinematicCarMotionModel:
         # Hint: you may find the np.random.normal function useful
         # BEGIN SOLUTION "QUESTION 1.4"
         m = 100
-        noisycontrol = np.hstack(
-            (vel+np.random.normal(0, self.vel_std, m), alpha+np.random.normal(0, self.alpha_std, m)))
-
-        states = self.compute_changes(states, noisycontrol, dt)
-        states[:, 0] += np.random.normal(0, self.x_std, m)
-        states[:, 1] += np.random.normal(0, self.y_std, m)
-        states[:, 2] += np.random.normal(0, self.theta_std, m)
-        return
+        noisyvel = vel+np.random.normal(0, self.vel_std, m)
+        noisyalph = alpha+np.random.normal(0, self.alpha_std, m)
+        states[:, 0] =
 
         # END SOLUTION
