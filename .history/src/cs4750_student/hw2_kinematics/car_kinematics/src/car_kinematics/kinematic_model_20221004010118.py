@@ -137,7 +137,7 @@ class KinematicCarMotionModel:
                  (vel/self.car_length) * dt*np.tan(alpha)))
             states[:, 2] = states[:, 2] + \
                 (vel/self.car_length) * dt * np.tan(alpha)
-        states[:, 2] = reduce(states[:, 2])
+
         return
         # END SOLUTION
 
