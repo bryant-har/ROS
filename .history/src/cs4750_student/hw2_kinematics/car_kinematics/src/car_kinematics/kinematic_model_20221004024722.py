@@ -175,7 +175,7 @@ class KinematicCarMotionModel:
                 0, self.y_std, n_particles)), (np.random.normal(0, self.theta_std, n_particles)))
         ).T
 
-        states = changes
+        states = noisycontrol
         return
 
         # END SOLUTION
