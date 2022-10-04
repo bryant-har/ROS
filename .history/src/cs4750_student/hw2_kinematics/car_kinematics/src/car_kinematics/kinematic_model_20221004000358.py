@@ -81,11 +81,11 @@ class KinematicCarMotionModel:
         res2[:, 1] = (((self.car_length)/np.tan(controls[:, 1]))
                       * (np.cos(states[:, 2])-np.cos(states[:, 2]+res2[:, 2])))
 
-        res[:, 0] = np.where(np.abs(controls[:, 1]) <
+        res[:, 0] = np.where(np.abs(res[:, 2]) <
                              alpha_threshold, res[:, 0], res2[:, 0])
-        res[:, 1] = np.where(np.abs(controls[:, 1]) <
+        res[:, 1] = np.where(np.abs(res[:, 2]) <
                              alpha_threshold, res[:, 1], res2[:, 1])
-        res[:, 2] = np.where(np.abs(controls[:, 1]) <
+        res[:, 2] = np.where(np.abs(res[:, 2]) <
                              alpha_threshold, res[:, 2], res2[:, 2])
         return res
 
