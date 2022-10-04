@@ -69,18 +69,21 @@ class KinematicCarMotionModel:
 
         """
         # BEGIN "QUESTION 1.2" ALT="return np.zeros_like(states, dtype=float)"
+        np.(data, axis=1, ord=1)
         zeros = np.where(abs(controls[:, 1]) < alpha_threshold)
         nonzeros = np.where(abs(controls[:, 1] >= alpha_threshold))
         res = np.zeros(states.shape)
-        res[zeros, 0] = np.matmul(controls[:, 0], dt*np.cos(states[:, 2]))
-        res[zeros, 1] = np.matmul(controls[:, 0], dt*np.sin(states[:, 2]))
+        res[zeros, 0] = np.linalg.norm(
+            (controls[:, 0], dt*np.cos(states[:, 2])), axis=1, ord=1)
+        res[zeros, 1] = np.linalg.norm(
+            (controls[:, 0], dt*np.sin(states[:, 2])), axis=1, ord=1)
 
-        res[nonzeros, 2] = np.matmul(controls[:, 0]/self.car_length,
-                                     dt*np.tan(controls[:, 1]))
-        res[nonzeros, 0] = np.matmul((self.car_length)/np.tan(controls[:, 1]),
-                                     (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2])))
-        res[nonzeros, 1] = np.matmul((self.car_length)/np.tan(controls[:, 1]),
-                                     (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2])))
+        res[nonzeros, 2] = np.linalg.norm(np.hstack(controls[:, 0]/self.car_length,
+                                                    dt*np.tan(controls[:, 1])), axis=1, ord=1)
+        res[nonzeros, 0] = np.linalg.norm(np.hstack((self.car_length)/np.tan(controls[:, 1]),
+                                                    (np.sin(states[:, 2]+res[:, 2])-np.sin(states[:, 2]))), axis=1, ord=1)
+        res[nonzeros, 1] = np.linalg.norm(np.hstack((self.car_length)/np.tan(controls[:, 1]),
+                                                    (np.cos(states[:, 2])-np.cos(states[:, 2]+res[:, 2]))), axis=1, ord=1)
         return res
         # END
 
