@@ -126,7 +126,7 @@ class KinematicCarMotionModel:
                 (np.sin(states[:, 2])-np.sin(oldtheta))
             states[:, 1] = (self.car_length/np.tan(alpha)) * \
                 (np.cos(oldtheta)-np.cos(states[:, 2]))
-        return states
+        return
         # END SOLUTION
 
     def apply_motion_model(self, states, vel, alpha, dt):
