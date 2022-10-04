@@ -171,8 +171,7 @@ class KinematicCarMotionModel:
 
         changes = self.compute_changes(states, noisycontrol.T, dt)
         noisychanges = np.vstack(
-            ((np.random.normal(0, self.x_std, n_particles)), (np.random.normal(
-                0, self.y_std, n_particles)), (np.random.normal(0, self.theta_std, n_particles)))
+            ()
         )
 
         def reduce(theta):
@@ -195,7 +194,6 @@ class KinematicCarMotionModel:
                  (vel/self.car_length) * dt*np.tan(alpha)))
             states[:, 2] = states[:, 2] + \
                 (vel/self.car_length) * dt * np.tan(alpha)
-        states = states+noisychanges
         states[:, 2] = reduce(states[:, 2])
 
         return
