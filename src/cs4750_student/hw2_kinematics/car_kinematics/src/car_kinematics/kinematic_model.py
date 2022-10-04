@@ -72,8 +72,8 @@ class KinematicCarMotionModel:
         zeros = np.where(np.abs(controls[:, 1]) < alpha_threshold)
         nonzeros = np.where(np.abs(controls[:, 1] >= alpha_threshold))
         res = np.zeros(states.shape)
-        res[zeros, 0] = np.dot(controls[:, 0], dt*np.cos(states[:, 2]))
-        res[zeros, 1] = np.dot(controls[:, 0], dt*np.sin(states[:, 2]))
+        res[zeros, 0] = np.multiply(controls[:, 0], dt*np.cos(states[:, 2]))
+        res[zeros, 1] = np.multiply(controls[:, 0], dt*np.sin(states[:, 2]))
 
         res[nonzeros, 2] = np.dot(controls[:, 0]/self.car_length,
                                   dt*np.tan(controls[:, 1]))
