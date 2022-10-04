@@ -5,6 +5,7 @@ from threading import Lock
 import numpy as np
 from numpy.core.numeric import roll
 import rospy
+import math
 
 from std_msgs.msg import Float64
 
@@ -108,6 +109,24 @@ class KinematicCarMotionModel:
 
         # Hint: use same controls for all the particles
         # BEGIN SOLUTION "QUESTION 1.3"
+
+        def reduce(theta):
+            theta = theta % (2*math.pi)
+            theta = (theta + math.pi) % (2*math.pi)
+            return theta if (theta < math.pi) else (theta - 2*math.pi)
+
+        if abs(alpha) < 1e-2:
+            states[:, 0] = states[:, 0] + vel*dt*np.cos(states[:, 2])
+            states[:, 1] = states[:, 1] + vel*dt*np.sin(states[:, 2])
+        else:
+            oldtheta = states[:, 2]
+            states[:, 2] = reduce(
+                oldtheta + (vel/self.car_length) * dt*np.tan(alpha))
+            states[:, 0] = (self.car_length/np.tan(alpha)) * \
+                (np.sin(states[:, 2])-np.sin(oldtheta))
+            states[:, 1] = (self.car_length/np.tan(alpha)) * \
+                (np.cos(oldtheta)-np.cos(states[:, 2]))
+        return states
         # END SOLUTION
 
     def apply_motion_model(self, states, vel, alpha, dt):
