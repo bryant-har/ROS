@@ -69,7 +69,6 @@ class KinematicCarMotionModel:
 
         """
         # BEGIN "QUESTION 1.2" ALT="return np.zeros_like(states, dtype=float)"
-        np.(data, axis=1, ord=1)
         zeros = np.where(abs(controls[:, 1]) < alpha_threshold)
         nonzeros = np.where(abs(controls[:, 1] >= alpha_threshold))
         res = np.zeros(states.shape)
