@@ -94,7 +94,7 @@ class Foward_Kinematics_Broadcaster:
         L3 = 0.050
         L4 = 0.409
 
-        base_E_shoulder = dh_transform(0, 0, L0+L1, q_waist)
+        base_E_shoulder = dh_transform(0, 0, L0+L_1, q_waist)
         shoulder_E_Uarm = dh_transform(
             np.pi/2, 0, 0, q_shoulder+np.pi/2+np.arctan(L3/L2))
         Uarm_E_Uforearm = dh_transform(0, np.sqrt(
