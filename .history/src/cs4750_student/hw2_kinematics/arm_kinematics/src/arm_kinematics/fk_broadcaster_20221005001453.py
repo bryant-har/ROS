@@ -19,7 +19,7 @@ class Foward_Kinematics_Broadcaster:
 
     def compute_fk(self, q_waist, q_shoulder, q_elbow):
         '''Feel free to comment out the following once you compute your own base_E_gripper'''
-        '''base_E_shoulder = np.matrix([[1, 0, 0, 0.2],
+        base_E_shoulder = np.matrix([[1, 0, 0, 0.2],
                                     [0, 1, 0, 0.2],
                                     [0, 0, 1, 0.2],
                                     [0, 0, 0, 1]])
@@ -35,7 +35,6 @@ class Foward_Kinematics_Broadcaster:
                                         [0, 1, 0, 0.2],
                                         [0, 0, 1, 0.2],
                                         [0, 0, 0, 1]])
-        '''
         '''
         Input:
             q_waist: value for waist joint, the first slider on joint_state_publisher_gui controls this

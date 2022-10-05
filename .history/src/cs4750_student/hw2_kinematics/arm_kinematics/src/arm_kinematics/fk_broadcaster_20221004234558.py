@@ -19,7 +19,7 @@ class Foward_Kinematics_Broadcaster:
 
     def compute_fk(self, q_waist, q_shoulder, q_elbow):
         '''Feel free to comment out the following once you compute your own base_E_gripper'''
-        '''base_E_shoulder = np.matrix([[1, 0, 0, 0.2],
+        base_E_shoulder = np.matrix([[1, 0, 0, 0.2],
                                     [0, 1, 0, 0.2],
                                     [0, 0, 1, 0.2],
                                     [0, 0, 0, 1]])
@@ -35,7 +35,6 @@ class Foward_Kinematics_Broadcaster:
                                         [0, 1, 0, 0.2],
                                         [0, 0, 1, 0.2],
                                         [0, 0, 0, 1]])
-        '''
         '''
         Input:
             q_waist: value for waist joint, the first slider on joint_state_publisher_gui controls this
@@ -93,15 +92,12 @@ class Foward_Kinematics_Broadcaster:
         L0 = 0.072
         L1 = 0.039
         L2 = 0.250
-        L3 = 0.050
-        L4 = 0.409
+        L3 = 0.409
 
-        base_E_shoulder = dh_transform(0, 0, L0+L1, q_waist+np.pi)
-        shoulder_E_Uarm = dh_transform(
-            np.pi/2, 0, 0, q_shoulder+np.pi/2+np.arctan2(L3, L2))
-        Uarm_E_Uforearm = dh_transform(0, np.sqrt(
-            L3**2+L2**2), 0, q_elbow+np.pi/2-np.arctan2(L3, L2))
-        Uforearm_E_gripper = dh_transform(np.pi/2, 0, L4, 0)
+        base_E_shoulder = dh_transform()
+        shoulder_E_Uarm = dh_transform
+        Uarm_E_Uforearm = dh_transform
+        Uforearm_E_gripper = dh_transform
 
         # END SOLUTION
 
