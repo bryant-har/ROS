@@ -56,7 +56,7 @@ class Foward_Kinematics_Broadcaster:
 
         # BEGIN SOLUTION 2.2
 
-        def dh_transform(alpha, a, d, phi):
+        def dh_transform(self, alpha, a, d, phi):
             alphamatrix = np.array([
                 [1, 0, 0, 0],
                 [0, np.cos(alpha), -np.sin(alpha), 0],
