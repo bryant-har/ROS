@@ -27,6 +27,7 @@ class LowVarianceSampler:
 
         # You may want to cache some intermediate variables here for efficiency
         # BEGIN SOLUTION "QUESTION 1.3"
+        self.c = self.weights[0]
         # END SOLUTION
 
     def resample(self):
@@ -45,16 +46,15 @@ class LowVarianceSampler:
         with self.state_lock:
             # BEGIN SOLUTION "QUESTION 1.3"
             M = self.n_particles
-            states = np.array([])
+            states = np.zeros(M)
             r = np.random.random()/M
-            c = self.weights[0]
             i = 0  # i think zero based?
-            for m in range(1, M+1):
+            for m in range(M):
                 u = r + (m-1)/M
-                while u > c:
+                while u > self.c:
                     i += 1
                     c += self.weights[i]
-                states = np.append(states, self.particles[i])
-            self.particles = states
+                states[m] = self.particles[i]
+
             self.weights = np.ones(M)/M
             # END SOLUTION

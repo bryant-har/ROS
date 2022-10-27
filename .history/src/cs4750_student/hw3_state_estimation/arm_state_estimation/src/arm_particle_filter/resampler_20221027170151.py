@@ -47,14 +47,14 @@ class LowVarianceSampler:
             M = self.n_particles
             states = np.array([])
             r = np.random.random()/M
-            c = self.weights[0]
             i = 0  # i think zero based?
-            for m in range(1, M+1):
+            c = self.weights[0]
+            for m in range(M):
                 u = r + (m-1)/M
                 while u > c:
                     i += 1
                     c += self.weights[i]
                 states = np.append(states, self.particles[i])
-            self.particles = states
+
             self.weights = np.ones(M)/M
             # END SOLUTION

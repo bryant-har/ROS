@@ -27,6 +27,7 @@ class LowVarianceSampler:
 
         # You may want to cache some intermediate variables here for efficiency
         # BEGIN SOLUTION "QUESTION 1.3"
+        
         # END SOLUTION
 
     def resample(self):
@@ -44,17 +45,5 @@ class LowVarianceSampler:
         # https://docs.python.org/3/library/threading.html#using-locks-conditions-and-semaphores-in-the-with-statement
         with self.state_lock:
             # BEGIN SOLUTION "QUESTION 1.3"
-            M = self.n_particles
-            states = np.array([])
-            r = np.random.random()/M
-            c = self.weights[0]
-            i = 0  # i think zero based?
-            for m in range(1, M+1):
-                u = r + (m-1)/M
-                while u > c:
-                    i += 1
-                    c += self.weights[i]
-                states = np.append(states, self.particles[i])
-            self.particles = states
-            self.weights = np.ones(M)/M
+            pass # Remove this line to start
             # END SOLUTION
