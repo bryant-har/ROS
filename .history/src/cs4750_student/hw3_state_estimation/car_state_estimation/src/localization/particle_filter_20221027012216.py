@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from __future__ import division
-from pyexpat.errors import XML_ERROR_NOT_STANDALONE
 from threading import Lock, Thread
 
 import numpy as np
@@ -45,16 +44,7 @@ class ParticleInitializer:
         n_particles = particles.shape[0]
         # Hint: use utils.quaternion_to_angle to compute the orientation theta.
         # BEGIN SOLUTION "QUESTION 2.1"
-
-        weights[:] = np.ones(n_particles)/n_particles
-        noise = np.zeros(n_particles, 3)
-        noise[:, 0] = np.random.normal(0, self.x_std)
-        noise[:, 1] = np.random.normal(0, self.y_std)
-        noise[:, 2] = np.random.normal(0, self.theta_std)
-        init = utils.pose_to_particle(msg)
-
-        particles[:] = noise + init
-
+        
         # END SOLUTION
 
 
@@ -110,8 +100,7 @@ class ParticleFilter:
         # Numpy matrix of dimension N_PARTICLES x 3
         self.particles = np.zeros((self.n_particles, 3))
         # Numpy matrix containing weight for each particle
-        self.weights = np.full((self.n_particles), 1.0 /
-                               self.n_particles, dtype=float)
+        self.weights = np.full((self.n_particles), 1.0 / self.n_particles, dtype=float)
         self.particle_initializer = ParticleInitializer()
 
         self.state_lock = Lock()
@@ -134,15 +123,12 @@ class ParticleFilter:
         )
         self.permissible_region = np.zeros_like(array_255, dtype=bool)
         self.permissible_region[array_255 == 0] = 1
-        self.permissible_x, self.permissible_y = np.where(
-            self.permissible_region == 1)
+        self.permissible_x, self.permissible_y = np.where(self.permissible_region == 1)
 
         # Publishes the expected pose
-        self.pose_pub = rospy.Publisher(
-            "~inferred_pose", PoseStamped, queue_size=1)
+        self.pose_pub = rospy.Publisher("~inferred_pose", PoseStamped, queue_size=1)
         # Publishes a subsample of the particles
-        self.particle_pub = rospy.Publisher(
-            "~particles", PoseArray, queue_size=1)
+        self.particle_pub = rospy.Publisher("~particles", PoseArray, queue_size=1)
         # Publishes the path of the car
         self.pub_odom = rospy.Publisher("~odom", Odometry, queue_size=1)
 
@@ -251,8 +237,7 @@ class ParticleFilter:
         """
         cosines = np.cos(self.particles[:, 2])
         sines = np.sin(self.particles[:, 2])
-        theta = np.arctan2(np.dot(sines, self.weights),
-                           np.dot(cosines, self.weights))
+        theta = np.arctan2(np.dot(sines, self.weights), np.dot(cosines, self.weights))
         position = np.dot(self.particles[:, 0:2].transpose(), self.weights)
 
         # Offset to car's center of mass
@@ -301,8 +286,7 @@ class ParticleFilter:
                         proposal_indices = np.random.choice(
                             self.particle_indices, self.n_viz_particles, p=self.weights
                         )
-                        self.publish_particles(
-                            self.particles[proposal_indices, :])
+                        self.publish_particles(self.particles[proposal_indices, :])
                     else:
                         self.publish_particles(self.particles)
             rate.sleep()
@@ -370,8 +354,7 @@ class ParticleFilter:
             transform.transform.translation.y = pa[1] + off_y
             transform.transform.translation.z = 0
             nq = transformations.quaternion_from_euler(
-                0, 0, pa[2] +
-                transformations.euler_from_quaternion(delta_rot)[2]
+                0, 0, pa[2] + transformations.euler_from_quaternion(delta_rot)[2]
             )
             transform.transform.rotation.x = nq[0]
             transform.transform.rotation.y = nq[1]

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from __future__ import division
-from pyexpat.errors import XML_ERROR_NOT_STANDALONE
 from threading import Lock, Thread
 
 import numpy as np
@@ -45,16 +44,7 @@ class ParticleInitializer:
         n_particles = particles.shape[0]
         # Hint: use utils.quaternion_to_angle to compute the orientation theta.
         # BEGIN SOLUTION "QUESTION 2.1"
-
-        weights[:] = np.ones(n_particles)/n_particles
-        noise = np.zeros(n_particles, 3)
-        noise[:, 0] = np.random.normal(0, self.x_std)
-        noise[:, 1] = np.random.normal(0, self.y_std)
-        noise[:, 2] = np.random.normal(0, self.theta_std)
-        init = utils.pose_to_particle(msg)
-
-        particles[:] = noise + init
-
+        utils.pose_to_particle(msg, particles, weights)
         # END SOLUTION
 
 
