@@ -47,7 +47,7 @@ class CylinderTracker:
         self.constant_vel = np.array([0, 0])
 
         # Sample motion model noise with this std=std_constant_vel
-        std_constant_vel = 1
+        std_constant_vel = 100
 
         # Initial mean and covariance of the sampled particles
         initial_mean = np.array([320, 320]).reshape((-1, 1))
@@ -141,8 +141,7 @@ class CylinderTracker:
         else:
             x = x_true
             y = y_true
-        cv2.circle(current_frame, (int(x), int(y)),
-                   int(radius), (255, 0, 0), 2)
+        cv2.circle(current_frame, (int(x), int(y)), int(radius), (255, 0, 0), 2)
         return x, y
 
     def detect_cb(self, data):
@@ -165,10 +164,10 @@ class CylinderTracker:
         if self.running:
             # Obtain true detected pose of cylinder
             x_true, y_true, radius = self.get_detection(image, header)
-
+            
             if self.detected:
                 cv2.circle(current_frame, (int(x_true), int(y_true)),
-                           int(radius), (0, 0, 255), 4)
+                              int(radius), (0, 0, 255), 4)
 
                 # Add simulated noise to detected pose
                 x, y = self.add_noise(x_true, y_true, radius, current_frame)
@@ -194,7 +193,7 @@ class CylinderTracker:
             x_draw = x_estimated
             y_draw = y_estimated
             cv2.circle(current_frame, (x_draw, y_draw),
-                       radius, (0, 255, 0), 4)
+                          radius, (0, 255, 0), 4)
 
             # Publish estimated cylinder position for the arm to track
             pt = PoseStamped()
