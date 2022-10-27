@@ -55,6 +55,6 @@ class LowVarianceSampler:
                     i += 1
                     c += self.weights[i]
                 states = np.append(states, self.particles[i])
-            self.particles[:] = states
+            self.particles = states
             self.weights[:] = np.ones(M)/M
         # END SOLUTION
