@@ -52,8 +52,7 @@ class ParticleInitializer:
         noise[:, 1] = np.random.normal(0, self.y_std)
         noise[:, 2] = np.random.normal(0, self.theta_std)
         init = utils.pose_to_particle(msg)
-
-        particles[:] = noise + np.full((n_particles, 3), init)
+        particles[:] = noise + init
 
         # END SOLUTION
 
