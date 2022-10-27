@@ -53,9 +53,6 @@ class ParticleFilter:
             z: detector observation
         """
         # BEGIN SOLUTION 1.2 ###################################################
-        distances = np.sqrt(np.sum((z - self.particles)**2, axis=1))
-        mx = max(distances)
-        self.weights = (mx-distances)/mx
 
         # END SOLUTION #########################################################
 

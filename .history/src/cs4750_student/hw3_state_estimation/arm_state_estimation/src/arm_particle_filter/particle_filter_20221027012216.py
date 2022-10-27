@@ -41,8 +41,7 @@ class ParticleFilter:
         """
         dt = 0.1
         # # BEGIN SOLUTION 1.1 #################################################
-        u = dt * u + np.random.normal(0, self.std_u)
-        self.particles[:, :] += u
+        
         # # END SOLUTION #######################################################
 
     def update(self, z):
@@ -53,10 +52,7 @@ class ParticleFilter:
             z: detector observation
         """
         # BEGIN SOLUTION 1.2 ###################################################
-        distances = np.sqrt(np.sum((z - self.particles)**2, axis=1))
-        mx = max(distances)
-        self.weights = (mx-distances)/mx
-
+        
         # END SOLUTION #########################################################
 
         mean, cov = self.mean_and_variance()
