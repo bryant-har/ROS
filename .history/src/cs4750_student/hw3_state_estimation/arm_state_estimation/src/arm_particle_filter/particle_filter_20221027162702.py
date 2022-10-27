@@ -41,9 +41,8 @@ class ParticleFilter:
         """
         dt = 0.1
         # # BEGIN SOLUTION 1.1 #################################################
-        u = dt * u
-        self.particles[:, :] += u + \
-            np.random.normal(0, self.std_u, self.particles.shape)
+        u = dt * u + np.random.normal(0, self.std_u, u.shape)
+        self.particles[:, :] += u
         # # END SOLUTION #######################################################
 
     def update(self, z):
