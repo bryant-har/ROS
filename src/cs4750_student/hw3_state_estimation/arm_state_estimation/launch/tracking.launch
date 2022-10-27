@@ -1,0 +1,11 @@
+<launch>
+  <arg name="plot" default="False"/>
+
+  <include file="$(find arm_particle_filter)/launch/env.launch"/>
+  <node name="visualize_cylinder" pkg="arm_particle_filter" type="visualize_cylinder.py"/>
+
+  <node name="object_tracking" pkg="arm_particle_filter" type="object_tracking.py" output="screen">
+    <param name="plot" value="$(arg plot)"/>
+  </node>
+
+</launch>

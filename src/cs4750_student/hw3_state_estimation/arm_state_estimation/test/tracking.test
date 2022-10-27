@@ -1,0 +1,9 @@
+<launch>
+    <arg name="plot" default="false"/>
+
+    <include file="$(find arm_particle_filter)/launch/tracking.launch"/>
+    <test pkg="arm_particle_filter" type="tracking.py" test-name="test_object_tracking_particle_filter">
+        <param name="plot" value="$(arg plot)"/>
+    </test>
+
+</launch>
