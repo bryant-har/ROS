@@ -54,7 +54,7 @@ class LowVarianceSampler:
                 while u > c:
                     i += 1
                     c += self.weights[i]
-                states = np.append(states, self.particles[i])
+                self.particles[:]
             self.particles = states
-            self.weights = 1
+            self.weights = np.ones()
             # END SOLUTION
