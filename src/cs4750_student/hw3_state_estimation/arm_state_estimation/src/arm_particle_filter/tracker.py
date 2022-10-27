@@ -41,7 +41,7 @@ class CylinderTracker:
         # BEGIN SOLUTION "QUESTION 1.4": Parameters to tune
         ################################################################
         # Number of particles to be initialized for the particle filter
-        num_particles = 1000
+        num_particles = 100000
 
         # Constant velocity to be supplied to ParticleFilter.predict
         self.constant_vel = np.array([0, 0])
@@ -50,7 +50,7 @@ class CylinderTracker:
         std_constant_vel = 1
 
         # Initial mean and covariance of the sampled particles
-        initial_mean = np.array([320, 320]).reshape((-1, 1))
+        initial_mean = np.array([0, 0]).reshape((-1, 1))
         initial_cov = np.diag([10e7, 10e7])
         ################################################################
 
