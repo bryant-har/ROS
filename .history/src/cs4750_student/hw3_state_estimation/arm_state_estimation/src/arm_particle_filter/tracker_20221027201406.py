@@ -50,7 +50,7 @@ class CylinderTracker:
         std_constant_vel = 0.0001
 
         # Initial mean and covariance of the sampled particles
-        initial_mean = np.array([410, 410]).reshape((-1, 1))
+        initial_mean = np.array([400, 400]).reshape((-1, 1))
         initial_cov = np.diag([0.001, 0.001])
         ################################################################
         self.pf = ParticleFilter(
