@@ -47,10 +47,10 @@ class ParticleInitializer:
         # BEGIN SOLUTION "QUESTION 2.1"
 
         weights[:] = np.ones(n_particles)/n_particles
-        noise = np.zeros_like(particles)
-        noise[:, 0] = np.random.normal(0, self.x_std, size=n_particles).T
-        noise[:, 1] = np.random.normal(0, self.y_std, size=n_particles).T
-        noise[:, 2] = np.random.normal(0, self.theta_std, size=n_particles).T
+        noise = np.zeros_like(n_particle)
+        noise[:, 0] = np.random.normal(0, self.x_std)
+        noise[:, 1] = np.random.normal(0, self.y_std)
+        noise[:, 2] = np.random.normal(0, self.theta_std)
         init = utils.pose_to_particle(msg)
 
         particles[:] = noise + np.full((n_particles, 3), init)
