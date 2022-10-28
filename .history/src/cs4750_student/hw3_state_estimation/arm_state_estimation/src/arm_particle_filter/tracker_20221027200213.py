@@ -47,7 +47,7 @@ class CylinderTracker:
         self.constant_vel = np.array([0, 0])
 
         # Sample motion model noise with this std=std_constant_vel
-        std_constant_vel = 1
+        std_constant_vel = 0
 
         # Initial mean and covariance of the sampled particles
         initial_mean = np.array([350, 350]).reshape((-1, 1))
