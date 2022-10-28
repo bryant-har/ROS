@@ -51,7 +51,7 @@ class CylinderTracker:
 
         # Initial mean and covariance of the sampled particles
         initial_mean = np.array([410, 410]).reshape((-1, 1))
-        initial_cov = np.diag([1000, 1000])
+        initial_cov = np.diag([1, 1])
         ################################################################
         self.pf = ParticleFilter(
             initial_mean,
