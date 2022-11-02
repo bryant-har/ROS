@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/install
+
+Name: localization
+Description: Description of localization
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

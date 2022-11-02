@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/devel/.private/arm_particle_filter
+
+Name: arm_particle_filter
+Description: Description of arm_particle_filter
+Version: 0.0.1
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
