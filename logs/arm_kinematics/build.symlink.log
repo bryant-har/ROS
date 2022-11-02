@@ -1,6 +1,6 @@
-Symlinking /home/bjh254/homework_ws/devel/lib/pkgconfig/arm_kinematics.pc
-Symlinking /home/bjh254/homework_ws/devel/lib/python3/dist-packages/arm_kinematics/__init__.py
-Symlinking /home/bjh254/homework_ws/devel/lib/arm_kinematics/cmake.lock
-Symlinking /home/bjh254/homework_ws/devel/lib/arm_kinematics/fk_broadcaster_node
-Symlinking /home/bjh254/homework_ws/devel/share/arm_kinematics/cmake/arm_kinematicsConfig.cmake
-Symlinking /home/bjh254/homework_ws/devel/share/arm_kinematics/cmake/arm_kinematicsConfig-version.cmake
+Linked: (/home/bjh254/homework_ws/devel/.private/arm_kinematics/lib/arm_kinematics/cmake.lock, /home/bjh254/homework_ws/devel/lib/arm_kinematics/cmake.lock)
+Linked: (/home/bjh254/homework_ws/devel/.private/arm_kinematics/lib/arm_kinematics/fk_broadcaster_node, /home/bjh254/homework_ws/devel/lib/arm_kinematics/fk_broadcaster_node)
+Linked: (/home/bjh254/homework_ws/devel/.private/arm_kinematics/lib/pkgconfig/arm_kinematics.pc, /home/bjh254/homework_ws/devel/lib/pkgconfig/arm_kinematics.pc)
+Linked: (/home/bjh254/homework_ws/devel/.private/arm_kinematics/lib/python3/dist-packages/arm_kinematics/__init__.py, /home/bjh254/homework_ws/devel/lib/python3/dist-packages/arm_kinematics/__init__.py)
+Linked: (/home/bjh254/homework_ws/devel/.private/arm_kinematics/share/arm_kinematics/cmake/arm_kinematicsConfig-version.cmake, /home/bjh254/homework_ws/devel/share/arm_kinematics/cmake/arm_kinematicsConfig-version.cmake)
+Linked: (/home/bjh254/homework_ws/devel/.private/arm_kinematics/share/arm_kinematics/cmake/arm_kinematicsConfig.cmake, /home/bjh254/homework_ws/devel/share/arm_kinematics/cmake/arm_kinematicsConfig.cmake)

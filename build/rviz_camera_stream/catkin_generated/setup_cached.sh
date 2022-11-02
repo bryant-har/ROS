@@ -8,5 +8,7 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/bjh254/homework_ws/devel/.private/rviz_camera_stream:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/bjh254/homework_ws/devel/.private/rviz_camera_stream/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/bjh254/homework_ws/devel/.private/rviz_camera_stream/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/bjh254/homework_ws/build/rviz_camera_stream'
 export ROS_PACKAGE_PATH="/home/bjh254/homework_ws/src/cs4750_student/rviz_camera_stream:$ROS_PACKAGE_PATH"

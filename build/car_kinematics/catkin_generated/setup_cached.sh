@@ -9,6 +9,7 @@
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/bjh254/homework_ws/devel/.private/car_kinematics:$CMAKE_PREFIX_PATH"
 export LD_LIBRARY_PATH="/home/bjh254/homework_ws/devel/.private/car_kinematics/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/bjh254/homework_ws/devel/.private/car_kinematics/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/bjh254/homework_ws/build/car_kinematics'
 export PYTHONPATH="/home/bjh254/homework_ws/devel/.private/car_kinematics/lib/python3/dist-packages:$PYTHONPATH"
 export ROS_PACKAGE_PATH="/home/bjh254/homework_ws/src/cs4750_student/hw2_kinematics/car_kinematics:$ROS_PACKAGE_PATH"
