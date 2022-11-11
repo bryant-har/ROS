@@ -1,0 +1,98 @@
+"""Script for generating and visualizing roadmaps."""
+
+import argparse
+import errno
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import rospy
+
+from cs4750 import utils
+
+from planning.problems import R2Problem, SE2Problem
+from planning.roadmap import Roadmap
+from planning.samplers import samplers
+
+def mkdir_p(path):
+    """Equivalent to mkdir -p path.
+
+    The exist_ok flag for os.makedirs was introduced in Python 3.2.
+    This function provides Python 2 support.
+    """
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python ≥ 2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        # possibly handle other errno cases here, otherwise finally:
+        else:
+            raise
+
+def graph_location(
+    problem_name,
+    sampler_name,
+    num_vertices,
+    connection_radius,
+    curvature=None,
+    map_name=None,
+):
+    """Return the name of this graph in the cache."""
+    cache_dir = os.path.expanduser("~/.ros/graph_cache/")
+    mkdir_p(cache_dir)
+    if map_name is None:
+        map_name, _ = os.path.splitext(os.path.basename(rospy.get_param("/map_file")))
+    params = [map_name, problem_name, sampler_name, num_vertices, connection_radius]
+    if problem_name == "se2":
+        params.append(curvature)
+    name = "_".join(str(p) for p in params)
+    return os.path.join(cache_dir, name + ".pkl")
+
+def main(args):
+    map_info = None
+    saveto = args.saveto
+    if args.use_ros_map:
+        permissible_region, map_info = utils.get_map("/static_map")
+        saveto = graph_location(
+            args.problem,
+            args.sampler,
+            args.num_vertices,
+            args.connection_radius,
+            args.curvature,
+        )
+    elif args.text_map:
+        permissible_region = np.loadtxt(args.text_map, dtype=bool)
+    else:
+        permissible_region = np.ones((10, 10), dtype=bool)
+
+    if args.problem == "r2":
+        problem = R2Problem(permissible_region, map_info=map_info)
+    else:
+        problem = SE2Problem(
+            permissible_region, map_info=map_info, curvature=args.curvature
+        )
+    sampler = samplers[args.sampler](problem.extents)
+    rm = Roadmap(
+        problem,
+        sampler,
+        args.num_vertices,
+        connection_radius=args.connection_radius,
+        saveto=saveto,
+    )
+    rm.visualize(show_edges=args.show_edges)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="generate and visualize roadmaps")
+    parser.add_argument("-n", "--num-vertices", type=int, default=100)
+    parser.add_argument("-r", "--connection-radius", type=float, default=2.0)
+    parser.add_argument("-c", "--curvature", type=float, default=1.0)
+    parser.add_argument("--saveto", type=str, default=None)
+    parser.add_argument("--sampler", choices=samplers, default="halton")
+    parser.add_argument("--problem", choices=("r2", "se2"), default="r2")
+    parser.add_argument("--show-edges", action="store_true")
+    map_group = parser.add_mutually_exclusive_group()
+    map_group.add_argument("--use-ros-map", action="store_true")
+    map_group.add_argument("-m", "--text-map")
+    args = parser.parse_args(rospy.myargv()[1:])
+
+    main(args)
