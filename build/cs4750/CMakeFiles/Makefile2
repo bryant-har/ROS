@@ -384,8 +384,8 @@ CMakeFiles/_catkin_empty_exported_target.dir/clean:
 # Target rules for target CMakeFiles/_run_tests_cs4750_roslaunch-check_launch.dir
 
 # All Build rule for target.
-CMakeFiles/_run_tests_cs4750_roslaunch-check_launch.dir/all: CMakeFiles/clean_test_results_cs4750.dir/all
 CMakeFiles/_run_tests_cs4750_roslaunch-check_launch.dir/all: CMakeFiles/tests.dir/all
+CMakeFiles/_run_tests_cs4750_roslaunch-check_launch.dir/all: CMakeFiles/clean_test_results_cs4750.dir/all
 	$(MAKE) -f CMakeFiles/_run_tests_cs4750_roslaunch-check_launch.dir/build.make CMakeFiles/_run_tests_cs4750_roslaunch-check_launch.dir/depend
 	$(MAKE) -f CMakeFiles/_run_tests_cs4750_roslaunch-check_launch.dir/build.make CMakeFiles/_run_tests_cs4750_roslaunch-check_launch.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/bjh254/homework_ws/build/cs4750/CMakeFiles --progress-num= "Built target _run_tests_cs4750_roslaunch-check_launch"
