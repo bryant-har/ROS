@@ -25,9 +25,10 @@ QueueEntry = collections.namedtuple(
 
 NULL = -1
 
+
 class ASTARPlanner(object):
     def __init__(self, rm):
-        self.rm = rm 
+        self.rm = rm
 
     def Plan(self, start, goal):
         """Compute the shortest path from start to goal on a roadmap.
@@ -55,7 +56,8 @@ class ASTARPlanner(object):
 
         c = count()
         queue = PriorityQueue()
-        queue.push(QueueEntry(self.rm.heuristic(start, goal), next(c), start, NULL, 0))
+        queue.push(QueueEntry(self.rm.heuristic(
+            start, goal), next(c), start, NULL, 0))
 
         while len(queue) > 0:
             entry = queue.pop()
@@ -73,17 +75,22 @@ class ASTARPlanner(object):
                 # Get the edge weight (length) and cache the heuristic value
                 weight = w.get("weight", 1)
                 if heuristic_cache[neighbor] == NULL:
-                    heuristic_cache[neighbor] = self.rm.heuristic(neighbor, goal)
+                    heuristic_cache[neighbor] = self.rm.heuristic(
+                        neighbor, goal)
                 h = heuristic_cache[neighbor]
 
                 # Compute this neighbor's cost-to-come via entry.node, and insert a
                 # new QueueEntry.
-                
-                ### BEGIN QUESTION 1.2 #####################
-                
-                ### END QUESTION 1.2 #####################
-        raise nx.NetworkXNoPath("Node {} not reachable from {}".format(goal, start))
 
+                ### BEGIN QUESTION 1.2 #####################
+                if not expanded[neighbor]:
+                    cost_to_come = problems.R2Problem.cost_to_come(entry)+w
+                    f = cost_to_come + h
+                    queue.push(QueueEntry(
+                        f, next(c), neighbor, entry, cost_to_come))
+                ### END QUESTION 1.2 #####################
+        raise nx.NetworkXNoPath(
+            "Node {} not reachable from {}".format(goal, start))
 
     def extract_path(self, parents, goal):
         """Extract the shortest path from start to goal.
@@ -96,15 +103,21 @@ class ASTARPlanner(object):
             vpath: a sequence of node labels from the start to the goal
         """
         # Follow the parents of the node until a NULL entry is reached
-        ### BEGIN QUESTION 1.2 ##################### 
-        
-        ### END QUESTION 1.2 #####################
+        ### BEGIN QUESTION 1.2 #####################
+        path = [goal]
+        curr = goal
+        while parents[curr] is not NULL:
 
+            curr = parents[curr]
+            path.append(curr)
+        return path[::-1]
+
+        ### END QUESTION 1.2 #####################
 
 
 class RRTPlanner(object):
 
-    def __init__(self, problem, map, bias = 0.05, eta = 1.0, max_iter = 100000, show_tree = False, batch_size = 1, shortcut = False):
+    def __init__(self, problem, map, bias=0.05, eta=1.0, max_iter=100000, show_tree=False, batch_size=1, shortcut=False):
         self.prob = problem         # Problem Environment
         self.map = map              # Map Environment
         self.tree = RRTTree(self.prob)
@@ -120,11 +133,11 @@ class RRTPlanner(object):
         self.shorten_path = None
 
     def Plan(self, start_config, goal_config, epsilon=0.001):
-        
+
         # Initialize an empty plan.
         plan_time = time.time()
-        self.start = start_config.reshape((1,-1))
-        self.end = goal_config.reshape((1,-1))
+        self.start = start_config.reshape((1, -1))
+        self.end = goal_config.reshape((1, -1))
 
         # Start with adding the start configuration to the tree.
         self.tree.AddVertex(self.start)
@@ -134,7 +147,8 @@ class RRTPlanner(object):
             plt.ion()
             fig = plt.figure()
             ax = fig.add_subplot(111)
-            ax.imshow(self.map, cmap=plt.cm.gray, aspect="equal", interpolation="none", vmin=0, vmax=1, origin="lower",extent=self.prob.extents.ravel()[:4],)
+            ax.imshow(self.map, cmap=plt.cm.gray, aspect="equal", interpolation="none",
+                      vmin=0, vmax=1, origin="lower", extent=self.prob.extents.ravel()[:4],)
             plt.scatter(self.start[:, 0], self.start[:, 1], c="g", zorder=3)
             plt.scatter(self.end[:, 0], self.end[:, 1], c="r", zorder=3)
         if isinstance(self.prob, problems.JointSpace):
@@ -143,16 +157,16 @@ class RRTPlanner(object):
             dim = 2
         found = False
         batch_size = self.batch_size
-            
+
         for _ in range(self.max_iter):
-            
+
             if batch_size > 1:
                 xs_rand = self.sample_batch(self.end, batch_size)
             else:
                 xs_rand = self.sample(self.end)
             new_eid = []
             for i in range(xs_rand.shape[0]):
-                x_rand = xs_rand[i].reshape((1,dim))
+                x_rand = xs_rand[i].reshape((1, dim))
                 ### BEGIN QUESTION 2.1 #####################
                 ''' 
                 We provide you, x_rand, a point sampled from space
@@ -161,7 +175,7 @@ class RRTPlanner(object):
                 If the node x_new is valid (not None), add vertex and edge to tree, and append its vertex id to the new_eid list
                 If distance to goal (calculated using self.prob.compute_distance) is less than epsilon threshold, stop iterations and set goal_id
                 '''
-                              
+
                 ### END QUESTION 2.1 #######################
 
             if isinstance(self.prob, problems.R2Problem) and self.show_tree:
@@ -186,7 +200,7 @@ class RRTPlanner(object):
 
         # Construct plan
         plan = self.end
-        
+
         cid = goal_id
         root_id = self.tree.GetRootID()
         while cid != root_id:
@@ -205,7 +219,7 @@ class RRTPlanner(object):
         print("Sampled Collisions: %d" % self.collision)
         if self.shortcut:
             self.shorten_path = self.ShortenPath(plan)
-            print("Shorter path: ",self.shorten_path)
+            print("Shorter path: ", self.shorten_path)
         return plan
 
     def sample(self, goal):
@@ -253,17 +267,17 @@ class RRTPlanner(object):
                     node in the current tree that is the closest to x_rand
             x_rand: np.array with shape (1, M) where M M maybe 2 (R2 Problem) or 6 (6D Robot Arm),
                     newly sampled random point
-        
+
         Returns:
             x_new: np.array with shape (1, M) where M maybe 2 (R2 Problem) or 6 (6D Robot Arm),  
                    a point on the path from x_near to x_rand, that is step_size away from x_near, 
                    where step_size = self.eta * euclidean distance between x_near and x_rand. 
-            
+
             Remember to use self.prob.check_edge_validity() to check for collision
             Return None if the new edge is in collision. 
         '''
         ### BEGIN QUESTION 2.1 #####################
-                
+
         ### END QUESTION 2.1 #######################
         self.collision += 1
         return None
@@ -279,16 +293,15 @@ class RRTPlanner(object):
         Returns:
             shortened path: np.array of size (K', M) where M maybe 2 (R2 Problem) or 6 (6D Robot Arm), 
                             shortened path consisting of K' <= K nodes where each node is of dimension (1, M).
-        
+
         Hint: Use self.prob.check_edge_validity to check for collision.
               The function will return True if collision free.
         '''
         ### BEGIN QUESTION 2.2 (Grad Students Only) ####
-        
-        ### END QUESTION 2.2 ###########################
-        
 
-    def visualize_plan(self, plan, tree = None, visited = None):
+        ### END QUESTION 2.2 ###########################
+
+    def visualize_plan(self, plan, tree=None, visited=None):
         '''
         Visualize the final path
         @param plan Sequence of states defining the plan.
@@ -317,13 +330,12 @@ class RRTPlanner(object):
             x = [plan[i, 0], plan[i+1, 0]]
             y = [plan[i, 1], plan[i+1, 1]]
             plt.plot(x, y, 'b')
-        
+
         if self.shortcut:
             for i in range(np.shape(self.shorten_path)[0] - 1):
                 x = [self.shorten_path[i, 0], self.shorten_path[i+1, 0]]
                 y = [self.shorten_path[i, 1], self.shorten_path[i+1, 1]]
                 plt.plot(x, y, 'g')
-        
 
         plt.scatter(self.start[:, 0], self.start[:, 1], c="g", zorder=3)
         plt.scatter(self.end[:, 0], self.end[:, 1], c="r", zorder=3)

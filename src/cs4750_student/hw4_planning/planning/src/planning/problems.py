@@ -141,9 +141,9 @@ class R2Problem(PlanarProblem):
                    R2 state at index i of q1 and R2 state at index i of q2.
         """
         ### BEGIN QUESTION 1.1 #####################
-        
+        return np.sqrt(np.square(q1)+np.square(q2))
         ### END QUESTION 1.1 #######################
-    
+
     def cost_to_go(self, q1, goal):
         """Computes the Euclidean distance between each element of an array of R2 states and a goal R2 state (used by AStar).
 
@@ -156,7 +156,7 @@ class R2Problem(PlanarProblem):
                        R2 state at index i of q1 and goal R2 state.
         """
         return self.distance_between_states(np.atleast_2d(q1), np.atleast_2d(goal))
-    
+
     def cost_to_come(self, q1, q2):
         """Computes the Euclidean distance between corresponding elements of two arrays of states (used by AStar).
 
@@ -213,7 +213,8 @@ class SE2Problem(PlanarProblem):
     def __init__(
         self, permissible_region, map_info=None, check_resolution=0.01, curvature=1.0
     ):
-        super(SE2Problem, self).__init__(permissible_region, map_info, check_resolution)
+        super(SE2Problem, self).__init__(
+            permissible_region, map_info, check_resolution)
         self.curvature = curvature
         self.extents = np.vstack((self.extents, np.array([[-np.pi, np.pi]])))
 
@@ -229,8 +230,8 @@ class SE2Problem(PlanarProblem):
                    SE(2) state at index i of q1 and SE(2) state at index i of q2.
         """
         ### BEGIN QUESTION 3 #####################
-        ### Hint: try to make use of dubins.path_length()
-        
+        # Hint: try to make use of dubins.path_length()
+
         ### END QUESTION 3 #######################
 
     def cost_to_go(self, q1, goal):
@@ -285,22 +286,23 @@ class SE2Problem(PlanarProblem):
 
 
 class JointSpace(object):
-    
+
     def __init__(self):
-        self.sv_srv = rospy.ServiceProxy('/check_state_validity', GetStateValidity)
+        self.sv_srv = rospy.ServiceProxy(
+            '/check_state_validity', GetStateValidity)
         self.sv_srv.wait_for_service()
         self.rs = RobotState()
-        self.rs.joint_state.name = ['waist','shoulder', 'elbow', 'forearm_roll', 'wrist_angle', 'wrist_rotate']
+        self.rs.joint_state.name = [
+            'waist', 'shoulder', 'elbow', 'forearm_roll', 'wrist_angle', 'wrist_rotate']
         self.rs.joint_state.position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.name = "JointSpace"
 
     def interpolate(self, start_config, goal_config, step_size):
         return (1 - step_size) * start_config + step_size * goal_config
 
-
     def compute_distance(self, start_config, goal_config):
-        start_config = start_config.reshape((-1,6))
-        goal_config = goal_config.reshape((-1,6))
+        start_config = start_config.reshape((-1, 6))
+        goal_config = goal_config.reshape((-1, 6))
         ### BEGIN QUESTION 5 #####################
         '''
         Computes the time spent in executing motion between two states (used by RRT).
@@ -312,7 +314,7 @@ class JointSpace(object):
         Returns:
             time: float scalar, time spent in executing motion between two states
         '''
-        
+
         ### END QUESTION 5 #######################
 
     def state_validity_checker(self, q):
@@ -350,22 +352,24 @@ class JointSpace(object):
         # Sample random clear point from map
         lower_bound = np.array([-3.14, -1.88, -2.15, -3.14, -1.75, -3.14])
         upper_bound = np.array([3.14, 1.99, 1.61, 3.14, 2.15, 3.14])
-        q_rand = np.random.uniform(low = lower_bound, high = upper_bound, size = (1, 6))
+        q_rand = np.random.uniform(
+            low=lower_bound, high=upper_bound, size=(1, 6))
         while (not self.state_validity_checker(q_rand)):
-            q_rand = np.random.uniform(low = lower_bound, high = upper_bound, size = (1, 6))
+            q_rand = np.random.uniform(
+                low=lower_bound, high=upper_bound, size=(1, 6))
         return q_rand
 
     def check_edge_validity(self, config1, config2):
         config1.reshape((1, 6))
         config2.reshape((1, 6))
-    
+
         valid = True
         t = 0.0
         while t <= 1.0:
-            valid *= self.state_validity_checker(self.interpolate(config1, config2, t))
+            valid *= self.state_validity_checker(
+                self.interpolate(config1, config2, t))
             t += 0.1
         return bool(valid)
-
 
     def cost_to_come(self, config):
         return self.cost_to_come(config, self.goal)
@@ -375,7 +379,7 @@ class JointSpace(object):
         goal_config = goal_config.reshape((-1, 6))
         distance = np.zeros(max(start_config.shape[0], goal_config.shape[0]))
         for i in range(6):
-            abs_dist = np.abs(start_config[:,i] - goal_config[:,i])
+            abs_dist = np.abs(start_config[:, i] - goal_config[:, i])
             min_dist = np.minimum(abs_dist, np.abs(2*np.pi - abs_dist))
             if min_dist.shape[0] == 0:
                 return distance
@@ -396,7 +400,5 @@ class JointSpace(object):
         Returns:
             heuristic: scalar float, admissible heuristic that is non-negative and does not overestimate distance from config to goal_config
         '''
-        
+
         ### END QUESTION 4 #######################
-
-
