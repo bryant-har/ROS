@@ -192,8 +192,8 @@ class RRTPlanner(object):
                     self.tree.AddVertex(
                         x_new, self.prob.compute_distance(x_near, x_new))
                     self.tree.AddEdge(id, len(self.tree.vertices))
-                    self.tree.AddEdge(len(self.tree.vertices), id)
-                    new_eid.append(id)
+                    # self.tree.AddEdge(len(self.tree.vertices), id)
+                    new_eid.append(len(self.tree.vertices))
                 ### END QUESTION 2.1 #######################
 
             if isinstance(self.prob, problems.R2Problem) and self.show_tree:
