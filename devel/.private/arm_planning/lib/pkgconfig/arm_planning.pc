@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/devel/.private/arm_planning
+
+Name: arm_planning
+Description: Description of arm_planning
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/devel/.private/car_planning
+
+Name: car_planning
+Description: Description of car_planning
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

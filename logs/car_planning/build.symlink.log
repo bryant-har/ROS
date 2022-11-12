@@ -1,0 +1,6 @@
+Symlinking /home/bjh254/homework_ws/devel/lib/python3/dist-packages/car_planning/__init__.py
+Symlinking /home/bjh254/homework_ws/devel/lib/pkgconfig/car_planning.pc
+Symlinking /home/bjh254/homework_ws/devel/lib/car_planning/cmake.lock
+Symlinking /home/bjh254/homework_ws/devel/lib/car_planning/planner
+Symlinking /home/bjh254/homework_ws/devel/share/car_planning/cmake/car_planningConfig.cmake
+Symlinking /home/bjh254/homework_ws/devel/share/car_planning/cmake/car_planningConfig-version.cmake

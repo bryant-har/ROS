@@ -1,0 +1,6 @@
+Symlinking /home/bjh254/homework_ws/devel/lib/pkgconfig/arm_planning.pc
+Symlinking /home/bjh254/homework_ws/devel/lib/arm_planning/cmake.lock
+Symlinking /home/bjh254/homework_ws/devel/lib/arm_planning/rrt_planning
+Symlinking /home/bjh254/homework_ws/devel/lib/arm_planning/astar_planning
+Symlinking /home/bjh254/homework_ws/devel/share/arm_planning/cmake/arm_planningConfig.cmake
+Symlinking /home/bjh254/homework_ws/devel/share/arm_planning/cmake/arm_planningConfig-version.cmake

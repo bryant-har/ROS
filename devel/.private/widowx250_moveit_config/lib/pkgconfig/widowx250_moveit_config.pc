@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/devel/.private/widowx250_moveit_config
+
+Name: widowx250_moveit_config
+Description: Description of widowx250_moveit_config
+Version: 0.3.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

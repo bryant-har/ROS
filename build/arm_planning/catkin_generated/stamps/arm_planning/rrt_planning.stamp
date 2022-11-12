@@ -1,0 +1,137 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+from six.moves import input
+
+import sys
+import rospy
+import argparse
+import numpy as np
+import moveit_commander
+import moveit_msgs.msg
+from std_msgs.msg import Header
+from sensor_msgs.msg import JointState
+from planning.search import RRTPlanner
+from planning.problems import JointSpace
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+
+
+
+
+class Widowx250ArmPlanning(object):
+    """MoveGroupPythonIntefaceTutorial"""
+
+    def __init__(self):
+        super(Widowx250ArmPlanning, self).__init__()
+
+        moveit_commander.roscpp_initialize(sys.argv)
+        rospy.init_node("Widowx250ArmPlanning", anonymous=True)
+        self.robot = moveit_commander.RobotCommander()
+        self.scene = moveit_commander.PlanningSceneInterface()
+        self.move_group = moveit_commander.MoveGroupCommander("widowx250_manipulator")
+        self.display_trajectory_publisher = rospy.Publisher("move_group/display_planned_path", moveit_msgs.msg.DisplayTrajectory, queue_size=20)
+
+        self.planning_frame = self.move_group.get_planning_frame()
+        self.eef_link = self.move_group.get_end_effector_link()
+        self.group_names = self.robot.get_group_names()
+        self.pub = rospy.Publisher('joint_states_waypoints', JointState, queue_size=10)
+        np.random.seed(1111)
+
+
+def main(args):
+    try:
+        print("")
+        print("----------------------------------------------------------")
+        print("Welcome to the Widowx Arm Planning Assignment: RRT Planning")
+        print("----------------------------------------------------------")
+        print("Press Ctrl-D to exit at any time")
+        print("")
+        arm = Widowx250ArmPlanning()
+        
+        if args.eta != None:
+            eta = args.eta[0]
+            if eta > 1 or eta < 0:
+                print("invalid eta value")
+                return
+        else:
+            eta = 0.5
+        space = JointSpace()
+        if args.start != None and not space.arm_state_validity_checker(np.array(args.start).reshape((1,-1))):
+            print("start joint location in collision")
+            return
+        if args.end != None and not space.arm_state_validity_checker(np.array(args.end).reshape((1,-1))):
+            print("end joint location in collision")
+            return
+
+        rrt_planner = RRTPlanner(space, map = None, bias=args.bias, eta=eta, batch_size=args.batch_size, shortcut=args.shortcut)
+        current_config = arm.move_group.get_current_joint_values()
+
+        # Initialize goal joint
+        # default_joint_goal = np.array([-1.3407, 0.7138, -0.3905, 0.1298, -0.3114, 0.0])
+        default_joint_goal = [-2.3472, 0.9303, -0.8133, 1.6733, 0.8535, -1.7264]
+        
+        if args.start == None:
+            start = np.array(current_config)
+        else: 
+            start = np.array(args.start)
+
+        print("Start: ",start)
+
+        if args.end == None:
+            goal = np.array(default_joint_goal)
+        else: 
+            goal = np.array(args.end)
+
+        plan = rrt_planner.Plan(start, goal, epsilon = 0.1)
+        print(plan)
+
+
+        display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+        display_trajectory.trajectory_start = arm.robot.get_current_state()
+        robo_traj = moveit_msgs.msg.RobotTrajectory()
+        waypoint_traj = JointTrajectory()
+        waypoint_traj.joint_names = ['waist', 'shoulder', 'elbow', 'forearm_roll', 'wrist_angle', 'wrist_rotate']
+        d = rospy.Duration.from_sec(0.5)
+
+        for i in range(plan.shape[0]):
+            waypoint = JointTrajectoryPoint()
+            waypoint.positions = plan[i].tolist()
+            waypoint.time_from_start = d
+            waypoint_traj.points.append(waypoint)
+            d = d + rospy.Duration.from_sec(2)
+        robo_traj.joint_trajectory = waypoint_traj
+        display_trajectory.trajectory.append(robo_traj)
+        # Publish
+        arm.display_trajectory_publisher.publish(display_trajectory)
+
+        command = JointState()
+        command.header = Header()
+        command.name = ['waist', 'shoulder', 'elbow', 'forearm_roll', 'wrist_angle', 'wrist_rotate']
+        goal = plan[-1]
+        command.position = goal
+        command.velocity = []
+        command.effort = []
+        beginTime = rospy.Time.now()
+        d = rospy.Duration.from_sec(0.5)
+        endTime = d + beginTime
+        while rospy.Time.now() < endTime:
+            command.header.stamp = rospy.Time.now()
+            arm.pub.publish(command)
+        return
+    except KeyboardInterrupt:
+        return
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="test RRT on widowx250"
+    )
+    parser.add_argument("-s", "--start", nargs=6, type=float, required=False)
+    parser.add_argument("-g", "--end", nargs=6, type=float, required=False)
+    parser.add_argument("-e", "--eta", nargs=1, type=float, required=False)
+    parser.add_argument('-b', '--bias', type=float, default=0.05, help='Goal bias for RRT')
+    parser.add_argument('-size', '--batch-size', type=int, default=1, help='Sample batch size for RRT')
+    parser.add_argument('--shortcut', action="store_true", help='shortcut')
+    args = parser.parse_args()
+    print(args.shortcut)
+    main(args)

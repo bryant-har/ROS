@@ -1,0 +1,152 @@
+#!/usr/bin/env python
+
+"""Script for running A* on R2 and SE2 problems without ROS."""
+
+from __future__ import print_function
+
+import sys
+import argparse
+import networkx as nx
+import numpy as np
+import time
+import moveit_commander
+import moveit_msgs.msg
+from planning.search import ASTARPlanner
+from planning.problems import JointSpace
+from planning.samplers import ArmRandomSampler
+from planning.roadmap import Roadmap
+import rospy
+import rospkg
+from sensor_msgs.msg import JointState
+from std_msgs.msg import Header
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+
+class Widowx250ArmAStarPlanning(object):
+    """MoveGroupPythonIntefaceTutorial"""
+
+    def __init__(self):
+        super(Widowx250ArmAStarPlanning, self).__init__()
+
+        moveit_commander.roscpp_initialize(sys.argv)
+        rospy.init_node("Widowx250ArmAStarPlanning", anonymous=True)
+        self.robot = moveit_commander.RobotCommander()
+        self.scene = moveit_commander.PlanningSceneInterface()
+        self.move_group = moveit_commander.MoveGroupCommander("widowx250_manipulator")
+        self.display_trajectory_publisher = rospy.Publisher("move_group/display_planned_path", moveit_msgs.msg.DisplayTrajectory, queue_size=20)
+
+        self.planning_frame = self.move_group.get_planning_frame()
+        self.group_names = self.robot.get_group_names()
+        self.eef_link = self.move_group.get_end_effector_link()
+        self.box_name = "box"
+        self.pub = rospy.Publisher('joint_states_waypoints', JointState, queue_size=10)
+        np.random.seed(148)
+
+
+def main(args):
+    arm = Widowx250ArmAStarPlanning()
+    current_config = arm.move_group.get_current_joint_values()
+    start = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+    default_goal = np.array([-1.3407, 0.7138, -0.3905, 0.1298, -0.3114, 0.0])
+
+    if args.start == None:
+            start = np.array(current_config)
+    else: 
+        start = np.array(args.start)
+
+    if args.end == None:
+        goal = np.array(default_goal)
+    else: 
+        goal = np.array(args.end)
+
+    # goal = np.array([-2.3472, 0.9303, -0.8133, 1.6733, 0.8535, -1.7264])
+    problem = JointSpace()
+    extents = np.array([[-3.14, 3.14], [-1.88, 1.99], [-2.15, 1.61], [-3.14, 3.14], [-1.75, 2.15], [-3.14, 3.14]])
+    sampler = ArmRandomSampler(extents = extents)
+    rospack = rospkg.RosPack()
+    map_path = rospack.get_path('arm_planning')
+    start_time = time.time()
+    rm = Roadmap(
+        problem,
+        sampler,
+        args.num_vertices,
+        connection_radius=args.connection_radius,
+        saveto=map_path+"/map/roadmap_joint_space.pkl",
+    )
+    astar_planner = ASTARPlanner(rm)
+    start_id = rm.add_node(start, is_start=True)
+    goal_id = rm.add_node(goal, is_start=False)
+
+    print("finish adding nodes")
+
+    try:
+        print("Running A*")
+        vpath, _ = astar_planner.Plan(start_id, goal_id)
+        plan = []
+        for i in vpath:
+            plan.append(rm.vertices[i])
+        end_time = time.time()
+        plan = np.array(plan)
+        print("Path length:", rm.compute_path_length(vpath))
+        print("Planning time:", end_time - start_time)
+        print("Edges evaluated:", rm.edges_evaluated)
+    except nx.NetworkXNoPath as e:
+        print(e)
+        return
+
+
+    display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+    display_trajectory.trajectory_start = arm.robot.get_current_state()
+    robo_traj = moveit_msgs.msg.RobotTrajectory()
+    waypoint_traj = JointTrajectory()
+    waypoint_traj.joint_names = ['waist', 'shoulder', 'elbow', 'forearm_roll', 'wrist_angle', 'wrist_rotate']
+    d = rospy.Duration.from_sec(2)
+    for i in range(plan.shape[0]):
+        waypoint = JointTrajectoryPoint()
+        waypoint.positions = plan[i].tolist()
+        waypoint.time_from_start = d
+        waypoint_traj.points.append(waypoint)
+        d = d + rospy.Duration.from_sec(2)
+    robo_traj.joint_trajectory = waypoint_traj
+    display_trajectory.trajectory.append(robo_traj)
+    arm.display_trajectory_publisher.publish(display_trajectory)
+    command = JointState()
+    command.header = Header()
+    command.name = ['waist', 'shoulder', 'elbow', 'forearm_roll', 'wrist_angle', 'wrist_rotate']
+    goal = plan[-1, :]
+    command.position = goal
+    command.velocity = []
+    command.effort = []
+    beginTime = rospy.Time.now()
+    d = rospy.Duration.from_sec(0.5)
+    endTime = d + beginTime
+    while rospy.Time.now() < endTime:
+        command.header.stamp = rospy.Time.now()
+        arm.pub.publish(command)
+    return
+
+
+
+if __name__ == "__main__":
+    print("")
+    print("----------------------------------------------------------")
+    print("Welcome to the Widowx Arm Planning Assignment")
+    print("----------------------------------------------------------")
+    print("Press Ctrl-D to exit at any time")
+    print("")
+
+    parser = argparse.ArgumentParser(description="test A* on widowx250")
+    parser.add_argument("-n", "--num-vertices", type=int, default=5000)
+    parser.add_argument("-r", "--connection-radius", type=float, default=2.7)
+    parser.add_argument("-s", "--start", nargs=6, type=float, required=False)
+    parser.add_argument("-g", "--end", nargs=6, type=float, required=False)
+    args = parser.parse_args()
+    main(args)
+
+    
+
+    
+    
+    
+    
+
+    
