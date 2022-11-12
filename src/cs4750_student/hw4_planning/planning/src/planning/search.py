@@ -191,7 +191,6 @@ class RRTPlanner(object):
                     eid = self.tree.AddVertex(
                         x_new, self.prob.compute_distance(x_near, x_new))
                     self.tree.AddEdge(id, eid)
-                    self.tree.AddEdge(eid, id)
                     new_eid.append(eid)
                 ### END QUESTION 2.1 #######################
 
