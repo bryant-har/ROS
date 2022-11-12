@@ -88,7 +88,7 @@ class ASTARPlanner(object):
                     c2c = entry.cost_to_come+weight
                     f = c2c + h
                     queue.push(QueueEntry(
-                        f, next(c), neighbor, entry, c2c))
+                        f, next(c), neighbor, entry.node, c2c))
                 ### END QUESTION 1.2 #####################
         raise nx.NetworkXNoPath(
             "Node {} not reachable from {}".format(goal, start))
