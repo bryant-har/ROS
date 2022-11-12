@@ -107,7 +107,7 @@ class ASTARPlanner(object):
         ### BEGIN QUESTION 1.2 #####################
         curr = goal
         path = []
-        while curr is not NULL:
+        while curr != NULL:
             path.append(curr)
             curr = parents[curr]
         return path[::-1]
