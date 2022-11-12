@@ -105,11 +105,9 @@ class ASTARPlanner(object):
         """
         # Follow the parents of the node until a NULL entry is reached
         ### BEGIN QUESTION 1.2 #####################
-        print("FEW")
         path = [goal]
         curr = goal
         while parents[curr] is not NULL:
-
             curr = parents[curr]
             path.append(curr)
         return path[::-1]
