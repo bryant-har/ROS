@@ -175,7 +175,18 @@ class RRTPlanner(object):
                 If the node x_new is valid (not None), add vertex and edge to tree, and append its vertex id to the new_eid list
                 If distance to goal (calculated using self.prob.compute_distance) is less than epsilon threshold, stop iterations and set goal_id
                 '''
-
+                x_near = self.tree.vertices[0]
+                for i in self.tree.vertices:
+                    best = sys.maxsize
+                    if self.prob.compute_distance(i, x_rand) < best:
+                        x_near = i
+                x_new = self.extend(x_near, x_rand)
+                if x_new is not None:
+                    new_eid.add(len(self.tree.vertices))
+                    self.tree.AddVertex(
+                        x_new, self.prob.compute_distances(x_near, x_new))
+                    self.tree.AddEdge(self.tree.vertices.index(
+                        x_near), len(self.tree.vertices))
                 ### END QUESTION 2.1 #######################
 
             if isinstance(self.prob, problems.R2Problem) and self.show_tree:
@@ -277,6 +288,10 @@ class RRTPlanner(object):
             Return None if the new edge is in collision. 
         '''
         ### BEGIN QUESTION 2.1 #####################
+        x_new = x_near + self.eta * (x_rand-x_near)
+
+        if self.prob.check_edge_validity(x_near, x_new):
+            return x_new
 
         ### END QUESTION 2.1 #######################
         self.collision += 1
