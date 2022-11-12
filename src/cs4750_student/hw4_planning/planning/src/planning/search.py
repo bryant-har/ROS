@@ -175,7 +175,8 @@ class RRTPlanner(object):
                 If the node x_new is valid (not None), add vertex and edge to tree, and append its vertex id to the new_eid list
                 If distance to goal (calculated using self.prob.compute_distance) is less than epsilon threshold, stop iterations and set goal_id
                 '''
-                best = sys.maxsize
+                best = self.prob.compute_distance(
+                    self.tree.vertices[0], x_rand)
                 id = 0
                 for i in range(len(self.tree.vertices)):
                     dist = self.prob.compute_distance(
@@ -184,8 +185,9 @@ class RRTPlanner(object):
                         best = dist
                         id = i
                 x_near = self.tree.vertices[id]
+
                 x_new = self.extend(x_near, x_rand)
-                if x_new is not None:
+                if x_new != None:
                     new_eid.append(len(self.tree.vertices))
                     self.tree.AddVertex(
                         x_new, self.prob.compute_distance(x_near, x_new))
