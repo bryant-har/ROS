@@ -83,11 +83,12 @@ class ASTARPlanner(object):
                 # new QueueEntry.
 
                 ### BEGIN QUESTION 1.2 #####################
+
                 if not expanded[neighbor]:
-                    cost_to_come = problems.R2Problem.cost_to_come(entry)+w
-                    f = cost_to_come + h
+                    c2c = entry.cost_to_come+weight
+                    f = c2c + h
                     queue.push(QueueEntry(
-                        f, next(c), neighbor, entry, cost_to_come))
+                        f, next(c), neighbor, entry, c2c))
                 ### END QUESTION 1.2 #####################
         raise nx.NetworkXNoPath(
             "Node {} not reachable from {}".format(goal, start))
