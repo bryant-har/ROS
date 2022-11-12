@@ -402,6 +402,6 @@ class JointSpace(object):
         '''
 
         def angleDif(a, b):
-            return abs((b-a+np.pi) % 2*np.pi - np.pi)
+            return abs((b-a+np.pi) % (2*np.pi) - np.pi)
         return np.sum(angleDif(config, goal_config))
         ### END QUESTION 4 #######################
