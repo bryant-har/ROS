@@ -184,7 +184,7 @@ class RRTPlanner(object):
                 if x_new is not None:
                     new_eid.append(len(self.tree.vertices))
                     self.tree.AddVertex(
-                        x_new, self.prob.compute_distances(x_near, x_new))
+                        x_new, self.prob.compute_distance(x_near, x_new))
                     self.tree.AddEdge(self.tree.vertices.index(
                         x_near), len(self.tree.vertices))
                 ### END QUESTION 2.1 #######################
