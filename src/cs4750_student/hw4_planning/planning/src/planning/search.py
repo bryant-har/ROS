@@ -195,7 +195,7 @@ class RRTPlanner(object):
                     if self.prob.compute_distance(x_new, self.end) < epsilon:
                         goal_id = eid
                 if goal_id != -1:
-                    break
+                    return
                 ### END QUESTION 2.1 #######################
 
             if isinstance(self.prob, problems.R2Problem) and self.show_tree:
