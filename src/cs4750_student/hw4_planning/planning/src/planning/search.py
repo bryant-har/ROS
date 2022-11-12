@@ -187,7 +187,9 @@ class RRTPlanner(object):
                 x_near = self.tree.vertices[id]
 
                 x_new = self.extend(x_near, x_rand)
-                if x_new != None:
+                if x_new == None:
+                    continue
+                else:
                     new_eid.append(len(self.tree.vertices))
                     self.tree.AddVertex(
                         x_new, self.prob.compute_distance(x_near, x_new))
