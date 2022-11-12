@@ -192,6 +192,9 @@ class RRTPlanner(object):
                         x_new, self.prob.compute_distance(x_near, x_new))
                     self.tree.AddEdge(id, eid)
                     new_eid.append(eid)
+                if self.prob.compute_distance(x_new, self.end) < epsilon:
+                    goal_id = eid
+                    return
                 ### END QUESTION 2.1 #######################
 
             if isinstance(self.prob, problems.R2Problem) and self.show_tree:
