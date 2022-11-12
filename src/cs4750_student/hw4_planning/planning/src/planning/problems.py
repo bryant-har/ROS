@@ -141,7 +141,7 @@ class R2Problem(PlanarProblem):
                    R2 state at index i of q1 and R2 state at index i of q2.
         """
         ### BEGIN QUESTION 1.1 #####################
-        return np.linalg.norm(q2-q1, axis=1)
+        return np.linalg.norm(q1-q2, axis=1)
         ### END QUESTION 1.1 #######################
 
     def cost_to_go(self, q1, goal):
