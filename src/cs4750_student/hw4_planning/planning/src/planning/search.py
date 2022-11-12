@@ -188,12 +188,11 @@ class RRTPlanner(object):
 
                 x_new = self.extend(x_near, x_rand)
                 if x_new is not None:
-                    new_eid.append(len(self.tree.vertices))
-                    self.tree.AddVertex(
+                    eid = self.tree.AddVertex(
                         x_new, self.prob.compute_distance(x_near, x_new))
-                    self.tree.AddEdge(id, len(self.tree.vertices))
-                    self.tree.AddEdge(len(self.tree.vertices), id)
-                    new_eid.append(len(self.tree.vertices))
+                    self.tree.AddEdge(id, eid)
+                    self.tree.AddEdge(eid, id)
+                    new_eid.append(eid)
                 ### END QUESTION 2.1 #######################
 
             if isinstance(self.prob, problems.R2Problem) and self.show_tree:
