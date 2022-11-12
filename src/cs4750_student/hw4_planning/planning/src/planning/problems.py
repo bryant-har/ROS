@@ -231,7 +231,7 @@ class SE2Problem(PlanarProblem):
         """
         ### BEGIN QUESTION 3 #####################
         # Hint: try to make use of dubins.path_length()
-
+        return dubins.path_length(q1, q2, self.curvature)
         ### END QUESTION 3 #######################
 
     def cost_to_go(self, q1, goal):
