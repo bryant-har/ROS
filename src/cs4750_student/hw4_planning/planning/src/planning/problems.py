@@ -314,6 +314,11 @@ class JointSpace(object):
         Returns:
             time: float scalar, time spent in executing motion between two states
         '''
+        vels = np.array([1.0, 1.2, 0.8, 0.75, 1.05, 0.9])
+
+        def angleDif(a, b):
+            return abs((b-a+np.pi) % (2*np.pi) - np.pi)
+        return (np.max(angleDif(start_config, goal_config)/vels))
 
         ### END QUESTION 5 #######################
 
