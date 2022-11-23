@@ -1,16 +1,25 @@
 # Homework 2: Kinematics
 
-## Car Kinematics
+## Download code base
+
+```
+cd ~/  
+git clone https://github.coecis.cornell.edu/fb266/foundations_of_robotics_fa21.git TODO
+cd foundations_of_robotics_fa21 && cp -r hw2_kinematics ~/homework_ws/src   
+cd ~/homework_ws && catkin build
+```
+
+## \# Car Kinematics
 In this part of the assignment, you will work with the MuSHR platform. The goal is to implement the kinematics model of the MuSHR car in 2D.
 
 **Q1**: Kinematics car model
 
 **Q1.1 (20 points)** Kinematics model derivation
 Let’s first review the kinematic model of the car and annotate the relevant lengths and angles (add figure).
-First, let’s assume that there is no control, that the velocity is stable, and that the steering angle is <em>zero</em>. We can then write out the change in states:
+First, let’s assume that there is no control and that the velocity was stable and the steering angle is <em>zero</em>. We can then write out the change in states:
 
 <figure>
-<img src="https://github.coecis.cornell.edu/rj277/homework_2/blob/main/hw2_kinematics/kinematics_model.png" alt="kinematics_model.png">
+<img src="https://github.com/RKJenamani/Foundations-of-Robotics/blob/main/cs4750_student/hw2_kinematics/kinematics_model.png" alt="kinematics_model.png">
 <figcaption align = "center"><b>Figure 1: Ackermann steering, or car-like steering</b></figcaption>
 </figure>
 
@@ -55,23 +64,48 @@ $$
 \end{align*}
 $$
 
-Please show your derivation process for $x_t$ and $y_t$ in your `/car_kinematics/README.md`. You may do this either by embedding Latex or taking a picture of your handwritten work (any illegible work will not be graded).
+Changes in positions: 
 
-<details>
-<summary>Rubric</summary>
+$$
+\int_{x_{t-1}}^{x_{t}} d x
+= \int_{t}^{t+\Delta t} v \cos \theta d t
+= \int_{\theta_{t-1}}^{\theta_t} v \cos \theta \frac{d \theta}{\frac{v}{L} \tan \alpha}
+= \frac{L}{\tan \alpha} \int_{\theta_{t-1}}^{\theta_{t}} \cos \theta d \theta
+$$
 
-* For <b>Q1.1</b>, 
-    
-    + 10 points for the correct derivation for $x_t$
-    
-    + 10 points for the correct derivation for $y_t$
-</details>
-<br>
+$$
+x_{t}-x_{t-1} = \frac{L}{\tan \alpha}\left[ \sin \theta_{t} - \sin \theta_{t-1} \right]
+$$
+
+$$
+\int_{y_{t-1}}^{y_{t}} dy
+= \int_{t}^{t+\Delta t} v \sin \theta d t
+= \int_{\theta_{t-1}}^{\theta_t} v \sin \theta \frac{d \theta}{\frac{v}{L} \tan \alpha}
+=\frac{L}{\tan \alpha} \int_{\theta_{t-1}}^{\theta_{t}} \sin \theta d \theta
+$$
+
+$$
+y_{t}-y_{t-1} =\frac{L}{\tan \alpha} \left[ -\cos \theta_{t} + \cos \theta_{t-1} \right]
+$$
+
+Putting it all together:
+
+$$
+\begin{align*}
+&\theta_{t} = \theta_{t} + \frac{v}{L} \tan \alpha \Delta t \\
+&x_{t}
+= x_{t-1} + \frac{L}{\tan \alpha} \left[ \sin \theta_{t} - \sin \theta_{t-1} \right] \\
+&y_{t}
+= y_{t-1} + \frac{L}{\tan \alpha} \left[ -\cos \theta_{t} + \cos \theta_{t-1} \right] \\
+\end{align*}
+$$
+
+Please show your derivation process in your `/car_kinematics/README.md`. You may do this either by embedding Latex or taking a picture of your handwritten work (any illegible work will not be graded).
 
 
 **Q1.2 (25 points)** Implement the kinematic car equations in the `KinematicCarMotionModel.compute_changes` method (`src/kinematics/kinematic_model.py`). Note that this method is deterministic: given initial state $\mathbf{x}_{t-1}$ and control $\mathbf{u}_t$, it integrates the kinematic car equations and returns a new state $\mathbf{x}_t$.
 
-Hint: Note that in our provided code, `states` has shape (M,3), and `control` has shape (M, 2). Think of it as we have M possible states for our car, and we have one command for every possible state (hence M commands in total). For example, the state represented by the first row of `states` will be applied with the control command represented by the first row of `control`. You will end up with an output array with shape (M, 3)  representing the change in states.
+Hint: Note that in our provided code, `states` has shape (M,3), and `control` has shape (M, 2). Think it as we have M possible states for our car, and we have one command for every possible state (hence M commands in total). For example, the state represented by the first row of `states` will be applied with the control command represented by the first row of `control`. You will end up with a output array with shape (M, 3) that representing the change in states.
 
 <details>
 <summary>
@@ -99,11 +133,10 @@ python3 test/kinematic_model.py
 
 Your code should pass all test cases starting with `test_compute_changes`.
 
-After successfully implementing the kinematic car equations, we would want to propagate the changes (obtained using `KinematicCarMotionModel.compute_changes`) across states to generate the motion of our car.
+After successfully implementing the kinematic car equations, we would want to propogate the changes (obtained using `KinematicCarMotionModel.compute_changes`) across states to generate the motion of our car.
 <details>
 <summary>Rubric</summary>
-
-* For <b>Q1.2</b>, 25 points if all test cases starting with `test_compute_changes` pass.
++ For <b>Q1.2</b>, 25 points if all test cases starting with `test_compute_changes` pass.
 </details>
 <br>
 
@@ -122,14 +155,12 @@ rosrun car_kinematics make_rollout_plot
 ```
 
 The staff solution produces the following plot after running the command above. Try to match these plots by correctly implementing the `apply_deterministic_motion_model` method.
-
 <figure class="figure mw-100 w-500px">
     <img src="make_rollout_plot.png" alt="Figure 2: Deterministic rollouts" class="figure-img img-fluid"/> 
     <figcaption align = "center"><b>Figure 2: Rollouts generated using the deterministic motion model. The initial state (green arrow), final state (red arrow) and the intermediate states from integrating the deterministic model (red dots).</b></figcaption>
 </figure>
-
 <br/><br/>
-Next, to make this simple kinematic model robust to various sources of modeling error, you’ll add noise in three steps. Noise is parameterized by $\sigma_v$ , $\sigma_\alpha$ (action noise) and $\sigma_x$ , $\sigma_y$ , $\sigma_\theta$ (model noise).
+Next, to make this simple kinematic model robust to various sources of modeling error, you’ll add noise in three steps. Noise is parameterized by $\sigma_v, \sigma_\alpha$ (action noise) and $\sigma_x, \sigma_y, \sigma_\theta$ (model noise).
 
 <ol type="1">
 <li>
@@ -144,11 +175,8 @@ Add model noise to the output $\Delta \mathbf{x}\_t \sim \mathcal{N}(\Delta \hat
 </ol>
 <details>
 <summary>Rubric</summary>
-
-*  For <b>Q1.3</b>,
-    
++ For <b>Q1.3</b>
     + 10 points if all test cases pass. 
-    
     + 10 points for matching the output in Figure 2.
 </details>
 <br>
@@ -157,14 +185,13 @@ Add model noise to the output $\Delta \mathbf{x}\_t \sim \mathcal{N}(\Delta \hat
 After completing Q1.1, Q1.2, Q1.3, Q1.4, expect your code to pass all the test cases in `test/kinematic_model.py`.
 <details>
 <summary>Rubric</summary>
-
-* For <b>Q1.4</b>, 15 points if all test cases pass.
++ For <b>Q1.4</b>, 15 points if all test cases pass.
 </details>
 <br>
 
 ## [Optional for CS 4750, ECE 4770, MAE 4760 but required for CS 5750] Exploring the Motion Model Parameters (10 points)
 
-**Q1.5 (10 points) (Bonus points for non CS 5750 students)**: The noise in this motion model is controlled by the parameters $\sigma_v$ , $\sigma_\alpha$  (action noise) and $\sigma_x$ , $\sigma_y$ , $\sigma_\theta$ (model noise). We’ve provided some initial values in `config/parameters.yaml`, but it’ll be up to you to tune them and make sure they’re reasonable. We’ve provided a script to visualize samples from your probabilistic motion model, under the current noise parameters in `config/parameters.yaml`.
+**Bonus Points**: The noise in this motion model is controlled by the parameters $\sigma_v, \sigma_\alpha$ (action noise) and $\sigma_x, \sigma_y, \sigma_\theta$ (model noise). We’ve provided some initial values in `config/parameters.yaml`, but it’ll be up to you to tune them and make sure they’re reasonable. We’ve provided a script to visualize samples from your probabilistic motion model, under the current noise parameters in `config/parameters.yaml`.
 
 ```
 rosrun car_kinematics make_motion_model_plot
@@ -185,21 +212,19 @@ The staff solution produces the following plots with our motion model that is tu
     </b></figcaption>
 </figure>
 
-> In `scripts/make_motion_model_plot`, look at the `example_cases` dictionary that generates these two plots. Each key of this dictionary is a tuple of nominal velocity, nominal steering angle, and duration to apply those nominal commands. Why does the motion model produce more particles within 10cm of the deterministic model prediction in Figure 2 than Figure 3?
+> In `scripts/make_motion_model_plot`, look at the `example_cases` dictionary that generates these two plots. Each key of this dictionary is a tuple of nominal velocity, nominal steering angle, and duration to apply those nominal commands. Why does the motion model produce more particles within 10cm of the deterministic model prediction in Figure 3 than Figure 4?
 
 The key to tuning is first understanding how each parameter affects the model.
 
->Tune your motion model parameters to match the staff parameters. To explain your tuning process, please save three versions of the figure with (3.0, 0.4, 0.5) that were generated by different parameters (`mm1.png`, `mm2.png`, `mm3.png`). In your writeup, explain what’s different between your plot and Figure 3 above, and how you’re changing the parameters in response to those differences. (Your last figure doesn’t need to match ours exactly.)
+>Tune your motion model parameters to match the staff parameters. To explain your tuning process, please save three versions of the figure with (3.0, 0.4, 0.5) that were generated by different parameters (`mm1.png`, `mm2.png`, `mm3.png`). In your writeup, explain what’s different between your plot and Figure 4 above, and how you’re changing the parameters in response to those differences. (Your last figure doesn’t need to match ours exactly.)
 
 <details>
 <summary>Rubric</summary>
-
-* <b>[Optional (required for 5000 level students)]</b>, 10 points. Save correct figures and answer the questions in the README. 
-    
++ <b>[Optional (required for 5000 level students]</b>, 10 points. "Exploring the Motion Model parameters" -- Save correct figures and answer the questions in the README. 
 </details>
 <br>
 
-## Arm Kinematics
+## \# Arm Kinematics
 ### Overview
 In this assignment, you will work with an 6 dof arm robot called [WidowX 250](https://www.trossenrobotics.com/widowx-250-robot-arm.aspx). 
 
@@ -208,17 +233,44 @@ In this assignment, you will work with an 6 dof arm robot called [WidowX 250](ht
   <figcaption> picture src: https://www.trossenrobotics.com/widowx-250-robot-arm.aspx </figcaption>
 </figure> 
 
-**Q2.1 (20 points)** : Write the D-H parameters of the robot arm in your README. You should follow the conventions we discussed in class. We provide the initial and end-effector frames. You need to come up with the D-H parameters for frames 1, 2, and 3 **ONLY**. Do **NOT** create any additional frames. The joints in this drawing represent the waist, the shoulder, and the elbow of the robot arm (more on this in **Q2.2**). For intersecting z-axes, remember to follow the convention mentioned in class to set the direction of $x_{i-1}$ to be in the same direction as $z_{i-1} \times z_i$.
+**Q2.1 (20 points)** : Write the D-H parameters of the robot arm in your README. You should follow the conventions we discussed in class. We provide the initial and end-effector frames. You **ONLY** need to come up with the D-H parameters for frames 1, 2, and 3. Do **NOT** create any additional frames. The joints in this drawing represent the waist, the shoulder, and the elbow of the robot arm (more on this in **Q2.2**).
 <figure>
   <img src="dh_params_2022.png" alt="dh_params 2022" width="600"/>
 </figure> 
 
+**SOLUTIONS:**
+
+<figure>
+  <img src="dh_params_2022_SOLUTIONS.png" alt="alt text" width="600"/>
+  <figcaption> D-H parameter frame assignment. </figcaption>
+</figure> 
+
+L0 = 0.072
+
+L1 = 0.039
+
+L2 = 0.25
+
+L3 = 0.05
+
+L4 = 0.409
+
+$\psi = \operatorname{tan}^{-1}(0.05/0.25)+\frac{\pi}{2} $
+
+or
+
+$\psi = \operatorname{arctan2}(0.25, -0.05) $
+        
+|  i  |     $\alpha_{i-1}$      |         $a_{i-1}$      |    $d_i$    |            $\phi_i$           |
+| --- | ----------------------- | ---------------------- | ----------- | ----------------------------- |
+|  1  |            0            |            0           | $L_0 + L_1$ |         $\theta_1+ \pi$       |
+|  2  |      $\frac{\pi}{2}$    |            0           |      0      |      $\theta_2 + \psi$        |
+|  3  |            0            | $\sqrt{L_2^2 + L_3^2}$ |      0      |    $\theta_3 + (\pi - \psi$)  |
+|  4  |      $\frac{\pi}{2}$    |           $L_4$        |      0      |             0                 |
+
 <details>
 <summary>Rubric</summary>
-    
-* 20 points: D-H parameters are correct
-    
-* -1.25 points: for each parameter that is incorrect.
++ 20 points: D-H parameters are correct
 </details>
 <br>
 
@@ -252,6 +304,9 @@ As you can see in the image below, you can choose to visualize other frames. We 
   <img src="tf.png" alt="alt text" width="200"/>
   <figcaption> tf interface </figcaption>
 </figure> 
+
+
+
 
 **Q2.2 (20 points)**:
 

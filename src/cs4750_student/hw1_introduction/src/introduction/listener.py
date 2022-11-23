@@ -1,8 +1,8 @@
 import numpy as np
 import rospy
 
-# Import necessary message type
 # BEGIN QUESTION 4.3
+"*** REPLACE THIS LINE ***"
 from geometry_msgs.msg import PoseStamped
 # END QUESTION 4.3
 
@@ -17,14 +17,12 @@ def norm_python(data):
     """
     n, d = data.shape
     norm = np.zeros(n)
-    # You can use np.absolute
     # BEGIN QUESTION 4.1
-    for i in range(len(data)):
-        val = 0
-        for j in range(len(data[0])):
-            val+= np.absolute(data[i,j])
-        norm[i]=val
-
+    for i in range(n):
+        total = 0
+        for j in range(d):
+            total += np.abs(data[i, j])
+        norm[i] = total
     # END QUESTION 4.1
     return norm
 
@@ -37,12 +35,10 @@ def norm_numpy(data):
     >>> norm_numpy(data)
     array([ 7., 17.])
     """
-    n, d = data.shape
-    norm = np.zeros(n)
-    # You can use np.linalg.norm.
+    # You can call np.sqrt, np.sum, np.square, etc.
     # Hint: you may find the `axis` parameter useful.
     # BEGIN QUESTION 4.2
-    norm = np.linalg.norm(data, axis = 1, ord = 1)
+    norm = np.linalg.norm(data, ord=1, axis=1)
     # END QUESTION 4.2
     return norm
 
@@ -59,6 +55,7 @@ class PoseListener:
         # import it at the top! If the message type from `rostopic info` is
         # "X_msgs/Y", the Python import would be "from X_msgs.msg import Y".
         # BEGIN QUESTION 4.3
+        "*** REPLACE THIS LINE ***"
         self.subscriber = rospy.Subscriber("/car/car_pose", PoseStamped, self.callback)
         # END QUESTION 4.3
 
@@ -71,7 +68,9 @@ class PoseListener:
 
         # Extract and store the x and y position from the message data
         # BEGIN QUESTION 4.4
-        self.storage.append((msg.pose.position.x, msg.pose.position.y))
+        "*** REPLACE THIS LINE ***"
+        position = msg.pose.position
+        self.storage.append((position.x, position.y))
         # END QUESTION 4.4
         if len(self.storage) == self.size:
             self.done = True

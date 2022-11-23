@@ -38,21 +38,33 @@ def convert_pixel_to_pos(pixel_x, pixel_y):
 
 class CylinderTracker:
     def __init__(self):
-        # BEGIN SOLUTION "QUESTION 1.4": Parameters to tune
+        # SOLUTION: Parameters to tune
         ################################################################
         # Number of particles to be initialized for the particle filter
-        num_particles = 1000
+        num_particles = 500
 
         # Constant velocity to be supplied to ParticleFilter.predict
         self.constant_vel = np.array([0, 0])
 
         # Sample motion model noise with this std=std_constant_vel
-        std_constant_vel = 1
+        std_constant_vel = 5
 
         # Initial mean and covariance of the sampled particles
-        initial_mean = np.array([410, 410]).reshape((-1, 1))
+        initial_mean = np.array([300, 10]).reshape((-1, 1))
         initial_cov = np.diag([5, 5])
         ################################################################
+        # num_particles = 1000 # 500
+
+        # # Constant velocity to be supplied to ParticleFilter.predict
+        # self.constant_vel = np.array([0, 0]) # 0, 0
+
+        # # Sample motion model noise with this std=std_constant_vel
+        # std_constant_vel = 100 # sol 5, 5 # initial 100
+
+        # # Initial mean and covariance of the sampled particles
+        # initial_mean = np.array([320, 320]).reshape((-1, 1)) # 300, 10
+        # initial_cov = np.diag([10e7, 10e7]) # 5, 5
+
         self.pf = ParticleFilter(
             initial_mean,
             initial_cov,
@@ -102,23 +114,33 @@ class CylinderTracker:
             (float, float) comprising of the detected cylinder position
         """
 
-        lower = np.array([100, 50, 20])
-        upper = np.array([120, 255, 255])
+        lower1 = np.array([0, 100, 20])
+        upper1 = np.array([10, 255, 255])
 
-        thresh = cv2.inRange(image, lower, upper)
+        lower2 = np.array([160, 100, 20])
+        upper2 = np.array([179, 255, 255])
+
+        lower_mask = cv2.inRange(image, lower1, upper1)
+        upper_mask = cv2.inRange(image, lower2, upper2)
+
+        thresh = lower_mask + upper_mask
+        # cv2.imshow('hi',thresh)
+        # cv2.waitKey(0)
+
         cnts = cv2.findContours(
             thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
 
+
         for c in cnts:
-            # compute the center of the contourestimated_cylinder
+            # compute the center of the contour
             (x_true, y_true), radius = cv2.minEnclosingCircle(c)
             gt_pose = PoseStamped()
             gt_pose.header = header
             gt_pose.pose.position.x, gt_pose.pose.position.y = x_true, y_true
             self.gt_cylinder_pub.publish(gt_pose)
             self.detected = True
-            return x_true, y_true, radius
+            return x_true, y_true, int(radius)
         else:
             return [None]*3
 
@@ -140,8 +162,7 @@ class CylinderTracker:
         else:
             x = x_true
             y = y_true
-        cv2.circle(current_frame, (int(x), int(y)),
-                   int(radius), (255, 0, 0), 2)
+        cv2.circle(current_frame, (int(x), int(y)), int(radius), (255, 0, 0), 2)
         return x, y
 
     def detect_cb(self, data):
@@ -158,16 +179,18 @@ class CylinderTracker:
         header.frame_id = "world"
         br = CvBridge()
         current_frame = br.imgmsg_to_cv2(data)
-        image = cv2.cvtColor(current_frame, cv2.COLOR_BGR2HSV)
+        image = image = cv2.cvtColor(current_frame, cv2.COLOR_BGR2HSV)
         result = current_frame.copy()
 
         if self.running:
             # Obtain true detected pose of cylinder
             x_true, y_true, radius = self.get_detection(image, header)
-
+            
             if self.detected:
+                if np.linalg.norm([x_true - 315, y_true - 355]) < 35:
+                    rospy.signal_shutdown("Task complete!")
                 cv2.circle(current_frame, (int(x_true), int(y_true)),
-                           int(radius), (0, 0, 255), 4)
+                              int(radius), (0, 0, 255), 4)
 
                 # Add simulated noise to detected pose
                 x, y = self.add_noise(x_true, y_true, radius, current_frame)
@@ -193,7 +216,7 @@ class CylinderTracker:
             x_draw = x_estimated
             y_draw = y_estimated
             cv2.circle(current_frame, (x_draw, y_draw),
-                       radius, (0, 255, 0), 4)
+                          radius, (0, 255, 0), 4)
 
             # Publish estimated cylinder position for the arm to track
             pt = PoseStamped()
@@ -210,9 +233,9 @@ class CylinderTracker:
             marker.pose.position.x = x_estimated
             marker.pose.position.y = y_estimated
             marker.pose.orientation.w = 1.
-            marker.color.r = 255.0
+            marker.color.r = 0.0
             marker.color.g = 0.0
-            marker.color.b = 0.0
+            marker.color.b = 255.0
             marker.color.a = 0.5
             marker.scale.x = 0.12
             marker.scale.y = 0.12

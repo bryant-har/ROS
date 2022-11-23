@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from __future__ import division
-from termios import N_PPP
 
 from threading import Lock
 
@@ -27,7 +26,10 @@ class LowVarianceSampler:
         self.n_particles = particles.shape[0]
 
         # You may want to cache some intermediate variables here for efficiency
-        # BEGIN SOLUTION "QUESTION 1.3"
+        # BEGIN SOLUTION "QUESTION 3.2"
+        self.step_array = np.arange(self.n_particles, dtype=np.float32)
+        self.step_array /= self.n_particles
+        self.indices = np.zeros(self.n_particles, dtype=int)
         # END SOLUTION
 
     def resample(self):
@@ -44,20 +46,35 @@ class LowVarianceSampler:
         # See the Python documentation for more information:
         # https://docs.python.org/3/library/threading.html#using-locks-conditions-and-semaphores-in-the-with-statement
         with self.state_lock:
-            # BEGIN SOLUTION "QUESTION 1.3"
-            M = self.n_particles
-            states = np.zeros_like(self.particles)
-            r = np.random.random()/M
-            c = self.weights[0]
-            i = 0  # i think zero based?
-            j = 0
-            for m in range(1, M+1):
-                u = r + (m-1)/M
-                while u > c:
-                    i += 1
-                    c += self.weights[i]
-                states[j] = self.particles[i]
-                j += 1
-            self.particles[:] = states
-            self.weights[:] = np.ones(M)/M
-        # END SOLUTION
+            # BEGIN SOLUTION "QUESTION 3.2"
+            # Choose an initial value from half open interval [0, 1/M)
+            initval = np.random.uniform(0, self.n_particles ** -1)
+
+            # Get the bin partitions
+            bin_parts = initval + self.step_array
+            # The last and highest value in bin_parts = r + 1 - (1/M)
+            # where r in [0, 1/M)
+
+            # Get the cumulative sum of the weights. Notice how the
+            # the space between entries is an interval proportional to
+            # the weight of the particle at that index
+            cum_weights = np.cumsum(self.weights)
+
+            idx_ptr = 0
+            for i in range(self.n_particles):
+                while (
+                    idx_ptr < (self.n_particles - 1)
+                    and cum_weights[idx_ptr] < bin_parts[i]
+                ):
+                    idx_ptr += 1
+                self.indices[i] = idx_ptr
+
+            # Concise O(M log M) implementation
+            # self.indices = np.searchsorted(cum_weights, bin_parts, side="left")
+
+            assert np.all(self.indices < self.n_particles)
+            self.particles[:] = self.particles[self.indices, :]
+
+            # Uniformly weight new particles
+            self.weights.fill(1.0 / self.n_particles)
+            # END SOLUTION

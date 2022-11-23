@@ -2,7 +2,7 @@
 
 """Run the PoseListener node and plot the resulting poses.
 
-This script plots the car's location and Manhattan Norm of this location over time.
+This script plots the car's location and distance from the origin over time.
 """
 
 import matplotlib.pyplot as plt
@@ -45,19 +45,15 @@ if __name__ == "__main__":
     # Uncomment plt.show() to visualize the plot
     # plt.show()
 
-    # Use norm_numpy to compute Manhattan Norms for the locations. Then,
-    # plot these norms in order as a line chart and save the plot.
+    # Use norm_numpy to compute the distance from the origin over time. Then,
+    # plot the distance over time as a line chart and save the plot.
     # BEGIN QUESTION 4.5
-
-    norms = norm_numpy(locations)
-    time = np.arange(locations.shape[0]) 
+    "*** REPLACE THIS LINE ***"
+    distance = norm_numpy(locations)
     plt.figure()
-    plt.plot(time, norms)
-    plt.title("Car Norms")
-    plt.xlabel("Time (index)")
+    plt.plot(distance)
+    plt.title("Distance from Origin")
+    plt.xlabel("Messages")
     plt.ylabel("Distance (m)")
-
     plt.show()
-    plt.savefig("norms.png")
-
     # END QUESTION 4.5

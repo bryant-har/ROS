@@ -11,6 +11,7 @@ from introduction.prime_number import is_prime_number
 # file were imported by another script, however, the condition would evaluate to
 # False and code inside won't run.
 if __name__ == "__main__":
+
     # Every node registers itself with the ROS master process, so we must pass a
     # name for the node. (A good practice is to use the same name as the script,
     # but it's up to you.)
@@ -26,8 +27,9 @@ if __name__ == "__main__":
     # to make sure it's the right type (an integer)! Feel free to specify a
     # default value.
     # BEGIN QUESTION 1.2
-    test_num = int(rospy.get_param("~test_number", 2))
-
+    "*** REPLACE THIS LINE ***"
+    test_number = rospy.get_param("~test_number", 7)
+    test_number = int(test_number)
     # END QUESTION 1.2
 
     # Here's an example to create a ROS publisher. The queue_size defines how
@@ -43,8 +45,8 @@ if __name__ == "__main__":
     # what type of messages do we want to publish from our prime_number publisher?
     # (Hint: check the imports at the top of the file.)
     # BEGIN QUESTION 1.2
-    prime_pub = rospy.Publisher(prime_topic, Bool, queue_size=1)
-
+    "*** REPLACE THIS LINE ***"
+    prime_publisher = rospy.Publisher(prime_topic, Bool, queue_size=1)
     # END QUESTION 1.2
 
     # It can take some time for the publisher to be ready, so we'll wait before
@@ -55,9 +57,9 @@ if __name__ == "__main__":
     example_publisher.publish("Hello World!")
 
     # Call is_prime_number with the test number you obtained earlier, then publish
-    # a boolean result using the prime_number publisher you created earlier.
+    # a boolean result.
     # BEGIN QUESTION 1.2
-
-    prime_pub.publish(is_prime_number(test_num))
-
+    "*** REPLACE THIS LINE ***"
+    prime_result = is_prime_number(test_number)
+    prime_publisher.publish(Bool(prime_result))
     # END QUESTION 1.2

@@ -20,33 +20,15 @@ To test your code, run
 $ roscd introduction
 $ python3 test/test_prime_number.py
 ```
-<details>
-<summary>Rubric</summary>
-There are two tests in test_prime_number.py, each test is worth 5 points
-</details>
+
 
 **Q1.2**: We’ve provided an annotated code skeleton to interface with ROS at `hw1_introduction/scripts/prime_number`. Follow the instructions inline to complete the code. Your implementation should now also pass `rostest introduction prime_number_small.test`.
 
-<details>
-<summary>In case you come across the error "FAILURE: Test node [introduction/test_prime_number_small.py] does not exist or is not executable" </summary>
-This is because you need to enable access to the said executable using chmod:
-
-```
-$ chmod +x ~/homework_ws/src/cs4750_student/hw1_introduction/test/test_prime_number_small.py
-```
-
- Please do the same for other executables for which this error arises in the future.
-</details>
-
-<details>
-<summary>Rubric</summary>
-15 points for passing prime_number_small.test
- </details>
- 
-**Q1.3**: Finally, we will write a launch file for our node to make it easier to run, and provide different inputs to `is_prime_number`. Since `hw1_introduction/scripts/prime_number` reads the input from the "~test_number" parameter from ROS, you will need to pass it to your node in your launch file. We have provided an annotated skeleton in `hw1_introduction/launch/prime_number.launch`. Follow the inline instructions to complete the launch file.
+**Q1.3**: Finally, we will write a launch file for our node to make it easier to run. Since your `is_prime_number` function requires a ROS parameter to run, you will need to pass it to your node in your launch file. We have provided an annotated skeleton in `hw1_introduction/launch/prime_number.launch`. Follow the inline instructions to complete the launch file.
 
 
-Let’s run the publisher node and see its output directly. After launching roscore, listen to the output topic. Then, start your prime number node using `prime_number.launch`. You should see the boolean value appear on the `/introduction/prime_number_output` topic in terminal 2! You can then run the prime number node with different input values. Here are the commands to run:
+
+Let’s run the publisher node and see its output directly. After launching roscore, listen to the output topic. Then, start your prime number node using `prime_number.launch`. You should see the boolean value appear on the `/introduction/prime_number_output` topic in terminal 2! You can then run the prime number node with different values for index. Here are the commands to run:
 ```
 $ # In terminal 1
 $ roscore
@@ -54,14 +36,8 @@ $ # In terminal 2
 $ rostopic echo /introduction/prime_number_output
 $ # In terminal 3
 $ roslaunch introduction prime_number.launch
-$ roslaunch introduction prime_number.launch test_number:=12
+$ roslaunch introduction prime_number.launch test_number:=7
 ```
-
-<details>
- <summary>Rubric</summary>
- We will grade this manually. This should be very simple, so you will get 5 points if correct or 0 point
-if incorrect.
- </details>
 
 ## \# Q2. Running the MuSHR Car in Simulation
 This section will show you how to run the MuSHR simulator and visualize what is going on. Simulators are important because they allow you to test things quickly and without the risk of damaging a robot, the environment, or people. Our simulator uses a kinematic car model (with some noise sprinkled in), meaning it simply implements and integrates some equations that describe the ideal motion of a mechanical system. It will not perfectly reflect the real world dynamics of the car. Regardless, it is still useful for a lot of things.
@@ -72,7 +48,7 @@ $ cd ~/homework_ws/
 $ source ~/homework_ws/devel/setup.bash
 $ roslaunch cs4750 teleop.launch
 ```
-Moving forward, we won’t always spell out that you’ll need to source the `homework_ws` workspace to do something. But remember that you can’t interact with ROS without having activated a workspace in your terminal. If you try to roslaunch and your terminal says “Command ‘roslaunch’ not found”, you probably forgot to activate the workspace!
+Moving forward, we won’t always spell out that you’ll need to activate the `homework_ws` workspace to do something. But remember that you can’t interact with ROS without having activated a workspace in your terminal. If you try to roslaunch and your terminal says “Command ‘roslaunch’ not found”, you probably forgot to activate the workspace!
 
 Like many `rosXXX` terminal commands, the first argument is the name of a package, and the second is the name of something inside that package (in this case, a launch file).
 
@@ -90,23 +66,21 @@ To stop the simulation, press `<Ctrl-C>` in the `teleop.launch` terminal window.
 
 ## \# Q3. Visualizing the Simulator
 
-Start the simulation again:
+Start the simulation again. 
 ```
-$ cd ~/homework_ws/
-$ source ~/homework_ws/devel/setup.bash
 $ roslaunch cs4750 teleop.launch
 ```
 To visualize the simulation, open up a separate terminal and run:
 ```
 $ rosrun rviz rviz -d ~/homework_ws/src/cs4750_student/cs4750/config/default.rviz
 ```
-If you see error messages in your terminal like “Could not load model…”, remember to source your workspace!
+If you see error messages in your terminal like “Could not load model…”, remember to activate your workspace!
 
 This will launch RViz with a configuration that has all the right topics visualized. A window like this should appear:
 
  <figure>
   <img src="./rviz_image.png" alt="alt text" width="1000"/>
-<!--   <figcaption>RViz visualizer.</figcaption> -->
+  <figcaption>RViz visualizer.</figcaption>
 </figure> 
 
 To drive the car, click on the small gray window and use the WASD keys.
@@ -138,7 +112,7 @@ RViz will load its default configuration (which usually is empty). Try adding th
 ## \# Q4: Your First Subscriber: PoseListener (50 pts)
 In this question, we’ll combine ROS with the [NumPy](https://numpy.org/doc/stable/user/quickstart.html) and [Matplotlib](https://matplotlib.org/) scientific computing libraries. NumPy makes computations faster by using vectorization, and Matplotlib creates plots and other data visualizations.
 
-We will compute the [Manhattan Norm](https://mathworld.wolfram.com/L1-Norm.html) in two ways: with regular Python for loops and with functions from NumPy. The input will be a 2D NumPy array of shape (N, D), which contains N vectors each of dimension D. The expected output will be a 1D NumPy array of shape (N,), where each entry is the Manhattan norm of the corresponding vector. For example:
+We will compute the [Manhattan Norm](https://mathworld.wolfram.com/L1-Norm.html) in two ways: with regular Python for loops and with functions from NumPy. The input will be a 2D NumPy array5 of shape (N, D), which contains N vectors each of dimension D. The expected output will be a 1D NumPy array of shape (N,), where each entry is the Manhattan norm of the corresponding vector. For example:
 
 ![image](https://media.github.coecis.cornell.edu/user/13409/files/efbb5c77-c3bb-46ab-bddd-1ceba6aad088)
 
@@ -150,31 +124,21 @@ We will compute the [Manhattan Norm](https://mathworld.wolfram.com/L1-Norm.html)
 **Q4.2**: In the same file, complete the `norm_numpy` function. 
 Try to use the NumPy function [np.linalg.norm](https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html).
 
-After completing Q4.1 and Q4.2, expect your code to pass the following test suite:
+After completing Q2.1 and Q2.2, expect your code to pass the nosetests_test.test_norms.py test suite.
 ```
 $ rosrun introduction test_norms.py
 ```
 
-<details>
- <summary>Rubric</summary>
-There are 4 tests in 'test_norm.py', 5 points each
- </details>
- 
 Run `rosrun introduction compare_norm` to compare the running time of your two implementations on 100 trials. This script will use matplotlib to plot the mean and standard deviation of your run time. Save the figure as `runtime_comparison.png`. 
 
-**Q4.3**: In the `PoseListener` class in the same file, initialize a subscriber `self.subscriber` to the car’s pose topic. To do so, you will need to pass the topic’s name, the message type being published and a callback function. Each time the subscriber receives a message, it will call the callback function to process the message data.
+**Q4.3**: In the `PoseListener` class in the same file, initialize a subscriber to the car’s pose topic. To do so, you will need to pass the topic’s name, the message type being published and a callback function. Each time the subscriber receives a message, it will call the callback function to process the message data.
 
 To find the right topic name to subscribe to, launch the car simulation again and run `rostopic list` to see all the topics being published. There’s one topic containing “car_pose” in its name. To figure out what type of messages are being sent on that topic, use `rostopic info XXX/car_pose`. When you construct the subscriber, pass `self.callback` as the callback function.
 
 **Q4.4**: Fill in the `PoseListener.callback` method by extracting the x and y position from the pose messages, then saving them in `self.storage`. To see what a car pose message looks like, run your car in the simulator and `rostopic echo XXX/car_pose`. Alternatively, you can look up the message type being published online to see its fields. Expect your code to pass the last test suite, `rostest introduction pose_listener.test`.
 
-<details>
- <summary>Rubric</summary>
-Once you implement both 4.3, 4.4, your code is expected to pass `pose_listener.test`, which is worth
-30 points.
- </details>
- 
-**Q4.5**: Now, let’s use the `PoseListener` to actually collect some data! In `hw1_introduction/scripts/pose_listener`, we’ve already used matplotlib to plot the xy-locations of your car and save the resulting plot to `locations.png`. Use your norm_numpy function to compute the Manhattan Norm for all the xy-locations of the car captured by the `PoseListener`. Then, use `matplotlib` to plot these Manhattan Norms in order such that the y-axis is Manhattan Norm values and the x-axis is an index array 0..N-1 (which is a proxy for time). Save the resulting plot to 'norms.png'.
+
+**Q4.5**: Now, let’s use the `PoseListener` to actually collect some data! In `hw1_introduction/scripts/pose_listener`, we’ve already used matplotlib to plot the xy-locations of your car and save the resulting plot to `locations.png`. Use your norm_numpy function to compute the car’s distance to the origin for all the xy-locations captured by the `PoseListener`. Then, use `matplotlib` to plot this distance as a function of time6, and save the resulting plot to 'distances.png'.
 
 First, start `teleop.launch` with the default `sandbox.yaml` map.
 
@@ -197,19 +161,19 @@ Finally, you can use the following launch configuration, which starts a `path_pu
 $ # In a separate shell
 $ roslaunch introduction path_publisher.launch plan_file:='$(find introduction)/plans/XXX.txt'
 ```
-  > Run the above configuration with the figure_8.txt and crown.txt plan files. For both plans, save the figures produced by pose_listener for submission: locations.png and norms.png. 
+  > Run the above configuration with the figure_8.txt and crown.txt plan files. For both plans, save the figures produced by pose_listener for submission: locations.png and distances.png. 
 
   > Optional: Let your artistic side shine and create your own plan file! If you do, please submit the plan file (and any code you may have used to generate it), as well as the locations.png producted by pose_listener. 
 
-## Deliverables (25 pts for graduate, 20 for undergraduate)
+### Deliverables (20 pts)
 Answer the following writeup questions in hw1_introduction/writeup/README.md.
 <ol>
 <li> Define in your own words what a node, topic, publisher, and subscriber are and how they relate to each other.</li>
 <li> What is the purpose of a launch file? </li>
-<li> Include the RViz screenshot showing the car. </li>
+<li> Include the RViz screenshot showing the new map. </li>
 <li> Include your runtime_comparison.png figure for the different norm implementations. </li>
-<li> Include the locations.png and norms.png figures for the plan figure_8.txt. </li>
-<li> Include the locations.png and norms.png figures for the plan crown.txt. </li>
+<li> Include the locations.png and distances.png figures for the plan figure_8.txt. </li>
+<li> Include the locations.png and distances.png figures for the plan crown_figure_8.txt. </li>
 <li> Optional for undergrad, mandatory for graduate: Include your own plan file, any code you wrote to generate it, and the resulting locations.png figure. </li>
 </ol>
 
@@ -220,7 +184,7 @@ Answer the following writeup questions in hw1_introduction/writeup/README.md.
 + Q2: 3 points.
 + Q3: 2 point.
 + Q4: 2 points
-+ Q5, Q6: 2.5 pts for each picture.
++ Q5, Q6: 2.5 pts for each location.png and distances.png.
 + Q7: 5 points for graduate, glory for undergraduate
 </details>
 

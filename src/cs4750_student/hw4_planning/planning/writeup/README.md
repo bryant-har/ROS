@@ -1,6 +1,0 @@
-# Project 4: Planning [![tests](../../../badges/submit-proj4/pipeline.svg)](../../../pipelines/submit-proj4/latest)
-
-My heuristic function computes the angular differences between each element of the current config and the goal config. It then takes the magnitudes of each difference and sums these magnitudes. Finally, it multiplies the sum by 0.9 to avoid exceeding the actual cost (due to floating point errors, the heuristic may overestimate or the underestimate cost by small amounts). This yields a nonnegative (sum of magnitudes) and not overestimating (multiplies estimate by 0.9 to account for floating point errors) heuristic. This heuristic is admissible.
-
-EXPLANATION OF ANGULAR DIFFERENCE MAGNITUDE CALCULATION:
-To compute the angular difference between any two angles, I take the signed difference between the two angles. Then I checked whether the difference was greater than or less than pi in magnitude. If it was greater (i.e. pi + difference exceeded 2pi) or less (i.e. pi + difference was less than 0), the modulo operation would reduce it to the respective signed smaller angle difference by arithmetic. The pi added in the modulo operation was added back. Then, the magnitude of the resultant signed difference was taken.

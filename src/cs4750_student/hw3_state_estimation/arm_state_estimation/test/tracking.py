@@ -29,14 +29,14 @@ class TestParticleFilterServoing(unittest.TestCase):
         except rospy.exceptions.ROSTimeMovedBackwardsException:
             # We expect time to jump back because the test restarts the bag
             pass
-        msgs = collector.start(duration=15)
+        collector.start(duration=15)
+        msgs = collector.msgs
         self.assertGreaterEqual(
-            len(msgs),
+            msgs.qsize(),
             50,
             msg="The test didn't receive enough messages to be able to compare "
             "the particle filter estimate with the ground truth.",
         )
-        sentinel = object()
 
         # Convert synchronized PoseStamped messages to state vectors
         estimates, references = [
@@ -52,13 +52,17 @@ class TestParticleFilterServoing(unittest.TestCase):
         rospy.loginfo("Mean position error: {}".format(np.mean(position_error)))
 
         # END SOLUTION
-        plt.xlabel("Time")
-        plt.ylabel("Position Error")
-        plt.plot(position_error)
-        plt.show()
-        plt.savefig("./position_error.png")
+        if plot:
+            plt.xlabel("x")
+            plt.ylabel("y")
+            plt.plot(estimates[:, 0], estimates[:, 1], c="r", label="Estimated State")
+            plt.plot(references[:, 0], references[:, 1], c="g", label="Ground Truth")
+            plt.legend()
+            plt.gca().set_aspect(aspect=1.0)
+            plt.show()
+            plt.savefig("/home/nlc62/homework_ws/src/cs4750_student/hw3_state_estimation/arm_state_estimation/test/figure.png")
 
-        pos_threshold = 9
+        pos_threshold = 19
         self.assertLess(
             np.mean(position_error),
             pos_threshold,

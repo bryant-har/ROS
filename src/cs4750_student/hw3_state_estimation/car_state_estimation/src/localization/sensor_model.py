@@ -106,6 +106,7 @@ class SingleBeamSensorModel:
         table_width = int(max_r) + 1
         prob_table = np.zeros((table_width, table_width))
 
+        # BEGIN SOLUTION "QUESTION 2.2"
         # This is a vectorized solution that doesn't actually use
         # the `compute_sensor_model` helper. We should consider
         # asking for the vectorized solution in the future for
@@ -137,6 +138,7 @@ class SingleBeamSensorModel:
 
         # Normalize
         prob_table /= prob_table.sum(axis=0, keepdims=True)
+        # END SOLUTION
 
         return prob_table
 

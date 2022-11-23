@@ -40,11 +40,12 @@ class ParticleFilter:
             u (np.array): x and y velocity (of shape (2,))
         """
         dt = 0.1
-        # # BEGIN SOLUTION 1.1 #################################################
-        u = dt * u
-        self.particles[:, :] += u + \
-            np.random.normal(0, self.std_u, self.particles.shape)
-        # # END SOLUTION #######################################################
+        # # BEGIN SOLUTION #######################################################
+        self.particles[:, 0] += u[0] * dt + \
+            (np.random.randn(len(self.particles)) * self.std_u)
+        self.particles[:, 1] += u[1] * dt + \
+            (np.random.randn(len(self.particles)) * self.std_u)
+        # # END SOLUTION #########################################################
 
     def update(self, z):
         """Update the state estimate after receiving an observation.
@@ -53,11 +54,13 @@ class ParticleFilter:
         Args:
             z: detector observation
         """
-        # BEGIN SOLUTION 1.2 ###################################################
-        distances = np.sqrt(np.sum((z - self.particles)**2, axis=1))
-        mx = max(distances)
-        self.weights[:] = (mx-distances)/mx
+        # BEGIN SOLUTION #######################################################
+        distance = np.linalg.norm(self.particles - z, axis=1)
+        max_distance = np.amax(distance)
+        likelihoods = max_distance - distance
 
+        self.weights *= likelihoods
+        self.weights /= self.weights.sum()
         # END SOLUTION #########################################################
 
         mean, cov = self.mean_and_variance()
