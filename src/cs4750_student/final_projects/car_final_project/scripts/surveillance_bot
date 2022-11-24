@@ -1,0 +1,144 @@
+#!/usr/bin/env python
+
+import json
+import time
+
+import numpy as np
+import rospkg
+import rospy
+from cs4750 import utils as utils_cs
+from geometry_msgs.msg import PoseStamped
+from numpy.lib import utils
+from std_msgs.msg import Bool, Header
+
+
+class SecurityBot:
+    def __init__(self):
+        self.goal_pub = rospy.Publisher(
+            '/move_base_simple/goal', PoseStamped, queue_size=1)
+        self.car_pose = rospy.Subscriber(
+            '/car/car_pose', PoseStamped, self.pose_cb)
+        self.current_car_pose = None
+        self.current_goal = None
+        self.goal_ctr = 0
+        self.goal_list = []
+        self.traversal_complete = False
+        self.room_check_order = []
+        
+        self.life = 100
+        self.life_ori = self.life
+        self.medicine = 0
+        self.doctor_time = 200
+        self.start_time = time.time()
+        rospack = rospkg.RosPack()
+        wp_path = rospack.get_path('car_final_project')
+        self.submission_file = open(wp_path + "/submission/output.txt", 'w+')
+        f = open(wp_path + '/scripts/sequence.json')
+        data = json.load(f)
+        waypoints = data['sequence']
+
+        for i in range(len(waypoints)):
+            goal = PoseStamped()
+            goal.header.frame_id = "map"
+            goal.header.stamp = rospy.Time.now()
+            goal.pose.position.x = waypoints[i][0]
+            goal.pose.position.y = waypoints[i][1]
+            goal.pose.orientation = utils_cs.angle_to_quaternion(
+                waypoints[i][2])
+            self.goal_list.append(goal)
+
+    def room_check(self):
+        x = self.current_car_pose.position.x
+        y = self.current_car_pose.position.y
+        if np.linalg.norm([x - 3.19, y - 1.1]) < 1.1:
+            self.room_check_order.append('A')
+            self.medicine += 50
+
+        elif np.linalg.norm([x - 1.8, y - 5.4]) < 1.5:
+            self.room_check_order.append('B')
+            self.doctor_time-=20
+            return
+
+        elif np.linalg.norm([x - 14.4, y - 3.69]) < 1.5:
+            self.room_check_order.append('C')
+            self.medicine += 20
+
+        elif np.linalg.norm([x - 9.7, y - 1.2]) < 1.5:
+            self.room_check_order.append('O')
+            start_time = self.start_time
+            end_time = time.time()
+            consumed_time = start_time-end_time
+            start_time = end_time
+            self.life += self.medicine
+            self.medicine = 0
+
+        
+
+    def pose_cb(self, msg):
+        self.current_car_pose = msg.pose
+
+    @property
+    def is_goal_reached(self):
+        if self.current_goal is None:
+            return False
+
+        goal_reached = False
+        """BEGIN SOLUTION"""
+        ###### check the difference between current_car_pose and current_goal
+        ###### you need to check position and orientation
+        ###### dist: the distance for position between current and goal car pose
+        ###### theta_diff: the difference for orientation
+        
+        """END SOLUTION"""
+        if dist < 1.0 and theta_diff < 0.0872665:
+            goal_reached = True
+        
+
+        if goal_reached:
+            self.room_check()
+            return True
+        else:
+            return False
+
+    @property
+    def check_complete(self):
+        num_check = len(self.room_check_order)
+        rospy.loginfo('Total rooms checked: {} / 3'.format(num_check))
+        if num_check == 3:
+            return True
+
+    def publish_goal(self):
+        if self.goal_ctr == len(self.goal_list) and self.is_goal_reached:
+            self.traversal_complete = True
+        if self.goal_ctr == 0:
+            rospy.loginfo("Send first goal")
+            self.goal_pub.publish(self.goal_list[0])
+            self.current_goal = self.goal_list[0].pose
+            self.goal_ctr += 1
+
+        while self.goal_ctr < len(self.goal_list) and self.is_goal_reached:
+            rospy.loginfo("Send goal number {} in the list".format(self.goal_ctr + 1))
+            self.goal_pub.publish(self.goal_list[self.goal_ctr])
+            self.current_goal = self.goal_list[self.goal_ctr].pose
+            self.goal_ctr += 1
+
+
+if __name__ == '__main__':
+    rospy.init_node('surveillance_bot')
+    bot = SecurityBot()
+    start_time = time.time()
+    # start_time = bot.start_time
+    msg = rospy.wait_for_message('/car_status', Bool)
+    while not bot.traversal_complete:
+        bot.publish_goal()
+    print('done')
+    time_taken = time.time() - start_time
+    bot.submission_file.write("Room visit order: {}\n".format(bot.room_check_order))
+    bot.submission_file.write("Time taken: {}\n".format(time_taken))
+    bot.submission_file.write("Cathy's life:{}\n".format(bot.life))
+    bot.submission_file.write("Efficiency:{}\n".format(bot.life/time_taken))
+
+    is_alive = (bot.life-bot.doctor_time)>0 and (time_taken<bot.doctor_time)
+    bot.submission_file.write("Is Cathy alive?:{}".format(is_alive))
+
+    rospy.loginfo("Surveillance successfully completed in {}".format(time_taken))

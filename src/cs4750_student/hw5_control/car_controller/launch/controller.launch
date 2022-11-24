@@ -1,0 +1,11 @@
+<launch>
+    <arg name="type" default=""/>
+    <group ns="car">
+    <node pkg="car_controller" type="control_node" name="controller" output="screen">
+        <param name="type" value="$(arg type)" />
+        <rosparam command="load" file="$(find car_controller)/config/parameters.yaml" />
+        <!-- Grab motion model params -->
+        <rosparam command="load" file="$(find localization)/config/parameters.yaml" />
+    </node>
+    </group>
+</launch>

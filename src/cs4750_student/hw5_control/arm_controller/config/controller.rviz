@@ -1,0 +1,277 @@
+Panels:
+  - Class: rviz/Displays
+    Help Height: 215
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /TF1/Frames1
+        - /TF1/Tree1
+      Splitter Ratio: 0.7425600290298462
+    Tree Height: 650
+  - Class: rviz/Help
+    Name: Help
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+Preferences:
+  PromptSaveOnExit: true
+Toolbars:
+  toolButtonStyle: 2
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        world:
+          Value: true
+        wx250s/base_link:
+          Value: true
+        wx250s/ee_arm_link:
+          Value: true
+        wx250s/ee_gripper_link:
+          Value: true
+        wx250s/fingers_link:
+          Value: true
+        wx250s/gripper_bar_link:
+          Value: true
+        wx250s/gripper_link:
+          Value: true
+        wx250s/gripper_prop_link:
+          Value: true
+        wx250s/left_finger_link:
+          Value: true
+        wx250s/lower_forearm_link:
+          Value: true
+        wx250s/right_finger_link:
+          Value: true
+        wx250s/shoulder_link:
+          Value: true
+        wx250s/upper_arm_link:
+          Value: true
+        wx250s/upper_forearm_link:
+          Value: true
+        wx250s/wrist_link:
+          Value: true
+      Marker Alpha: 1
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: false
+      Show Axes: false
+      Show Names: false
+      Tree:
+        world:
+          wx250s/base_link:
+            wx250s/shoulder_link:
+              wx250s/upper_arm_link:
+                wx250s/upper_forearm_link:
+                  wx250s/lower_forearm_link:
+                    wx250s/wrist_link:
+                      wx250s/gripper_link:
+                        wx250s/ee_arm_link:
+                          wx250s/gripper_bar_link:
+                            wx250s/fingers_link:
+                              wx250s/ee_gripper_link:
+                                {}
+                              wx250s/left_finger_link:
+                                {}
+                              wx250s/right_finger_link:
+                                {}
+                          wx250s/gripper_prop_link:
+                            {}
+      Update Interval: 0
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /cube_mover
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Background Color: 0; 0; 0
+      Camera Info Topic: /camera1/camera_info
+      Class: rviz_camera_stream/CameraPub
+      Display namespace: ""
+      Enabled: true
+      Frame Rate: -1
+      Image Encoding: rgb8
+      Image Topic: /camera1/image_raw
+      Name: CameraPub
+      Near Clip Distance: 0.009999999776482582
+      Queue Size: 2
+      Value: true
+      Visibility:
+        Grid: true
+        Marker: true
+        RobotModel: true
+        TF: true
+        Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: tray_pub
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Alpha: 1
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        wx250s/base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/ee_arm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        wx250s/ee_gripper_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        wx250s/fingers_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        wx250s/gripper_bar_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/gripper_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/gripper_prop_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/left_finger_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/lower_forearm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/right_finger_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/shoulder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/upper_arm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/upper_forearm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wx250s/wrist_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Name: RobotModel
+      Robot Description: robot_description
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+  Enabled: true
+  Global Options:
+    Background Color: 186; 253; 255
+    Default Light: true
+    Fixed Frame: wx250s/base_link
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+  Value: true
+  Views:
+    Current:
+      Class: rviz/XYOrbit
+      Distance: 1.4171088933944702
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Field of View: 0.7853981852531433
+      Focal Point:
+        X: 0.05636698007583618
+        Y: 0.37946486473083496
+        Z: 1.6391334156651283e-07
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.589796781539917
+      Target Frame: world
+      Yaw: 1.0867335796356201
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 1016
+  Help:
+    collapsed: false
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd0000000100000000000002020000039efc0200000007fb000000100044006900730070006c006100790073010000003d0000039e000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c006900640065007200000003b5000000410000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000001f9000001fd0000000000000000000005300000039e00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Views:
+    collapsed: false
+  Width: 1848
+  X: 72
+  Y: 27

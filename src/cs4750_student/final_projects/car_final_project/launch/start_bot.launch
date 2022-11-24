@@ -1,0 +1,47 @@
+<launch>
+    <arg name="car_name" default="car"/>
+    <arg name="map" default="$(find cs4750)/maps/maze_0.yaml"/>
+    <arg name="initial_x" default="0"/>
+    <arg name="initial_y" default="0"/>
+    <arg name="initial_theta" default="0"/>
+    <arg name="fake_localization" default="false" />
+    <arg name="controller" default="mpc"/>
+    <arg name="teleop" default="false"/>
+    <arg name="rviz" default="true" />
+
+    <arg name="num_vertices" default="2000"/>
+    <arg name="connection_radius" default="10.0"/>
+    <arg name="curvature" default="1.0"/>
+
+    <include file="$(find cs4750)/launch/teleop.launch">
+        <arg name="fake_localization" value="$(arg fake_localization)" />
+        <arg name="map" value="$(arg map)"/>
+        <arg name="initial_x" value="$(arg initial_x)"/>
+        <arg name="initial_y" value="$(arg initial_y)"/>
+        <arg name="initial_theta" value="$(arg initial_theta)"/>
+        <arg name="teleop" value="$(arg teleop)" />
+    </include>
+
+    <group ns="$(arg car_name)">
+        <!-- BEGIN SOLUTION -->
+        <!-- Launch particle filter similar to how we did in 
+            hw3_state_estimation/car_state_estimation/particle_filter_sim.launch.
+            Use arg tags to pass publish_tf (set to true, false if using fake_localization),
+            initial_x, initial_y, and initial_theta -->
+
+
+        <!-- Launch planner node from package "car_final_project".
+            Use param tags to pass num_vertices, connection_radius, and curvature. -->
+        
+        <!-- END SOLUTION -->
+    </group>
+
+    <node pkg="car_final_project" type="surveillance_bot" name="surveillance_bot" output="screen"/>
+
+    <!-- BEGIN SOLUTION -->
+    <!-- Launch controller from pkg "car_controller". Send the controller name as arg "type" -->
+
+    <!-- END SOLUTION -->
+
+    <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" args="-d $(find car_final_project)/config/planning.rviz"/>
+</launch>

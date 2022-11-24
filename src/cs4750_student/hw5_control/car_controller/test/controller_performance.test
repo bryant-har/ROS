@@ -1,0 +1,19 @@
+<launch>
+    <arg name="type" />
+    <arg name="rviz" default="false" />
+
+    <include file="$(find cs4750)/launch/teleop.launch">
+          <arg name="fake_localization" value="true" />
+          <arg name="teleop" value="false" />
+    </include>
+
+    <test pkg="car_controller" type="controller_performance.py" test-name="controller" ns="car">
+        <param name="type" value="$(arg type)" />
+        <rosparam command="load" file="$(find car_controller)/config/parameters.yaml" />
+        <!-- Grab motion model params -->
+        <rosparam command="load" file="$(find localization)/config/parameters.yaml" />
+    </test>
+
+    <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" args="-d $(find car_controller)/config/control.rviz"/>
+
+</launch>
