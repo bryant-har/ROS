@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+
+from __future__ import print_function
+import time
+import rospy
+import rospkg
+import numpy as np
+from planning.roadmap import Roadmap
+from planning.problems import JointSpace
+from arm_final_project.init_env import Env
+from planning.samplers import ArmRandomSampler
+from arm_controller.pid_controller import PIDController
+from interbotix_xs_modules.arm import InterbotixManipulatorXS
+from interbotix_xs_sdk.msg import *
+from arm_particle_filter.tracker import CylinderTracker
+from planning.search import ASTARPlanner
+from planning.problems import JointSpace
+from planning.samplers import ArmRandomSampler
+from planning.roadmap import Roadmap
+from arm_final_project.planning_context import Widowx250ArmPlanning
+
+class Airport(object):
+    def __init__(self):
+        extents = np.array([[-3.14, 3.14], [-1.88, 1.99], [-2.15, 1.61], [-3.14, 3.14], [-1.75, 2.15], [-3.14, 3.14]])
+        sampler = ArmRandomSampler(extents = extents)
+        rospack = rospkg.RosPack()
+        map_path = rospack.get_path('arm_final_project')
+        problem = JointSpace()
+        self.planning_context = Widowx250ArmPlanning()
+        self.rm = Roadmap(problem, sampler, 20000, connection_radius=2.5, saveto=map_path+"/map/roadmap_joint_space_final_new_env.pkl")
+        self.astar_planner = ASTARPlanner(self.rm)
+        self.bot = InterbotixManipulatorXS("wx250s", "arm", "gripper")
+        self.pid_controller = PIDController(self.bot)
+        self.ct = CylinderTracker()
+        self.AIRPORT_POS_DICT = self.planning_context.AIRPORT_POS_DICT
+
+    def extract_plan(self, vpath):
+        plan = []
+        for i in vpath:
+            plan.append(self.rm.vertices[i])
+        return np.array(plan)
+
+    def plan_and_execute(self, goal_name, detected_goal=None):
+        '''
+        Input:
+            goal_name (string): 
+                key value in AIRPORT_POS_DICT
+        '''
+        goal = self.AIRPORT_POS_DICT[goal_name]
+        if goal_name.split('_')[0] == "pickup" and detected_goal is not None:
+            goal[1] = detected_goal
+        ### BEGIN SOLUTION
+        # use self.planning_context.compute_ik() to convert goal (which contains end effector location and orientation) to joint space
+        # Note that we only need values for the first 6 joints (the last 3 joint values are for gripper fingers, and we will ignore them for now).
+        
+        # use controller.get_current_joints() to get the current joint values and cast it into numpy array
+        
+        # Insert current joint to roadmap as start position through self.rm.add_node, make use of the is_start flag
+        # Use self.rm.add_node()
+        # Assign output to a variable called start_id 
+        
+        # Insert goal joint values you just computed to roadmap, make use of the is_start flag
+        # Use self.rm.add_node()
+        # Assign output to a variable called goal_id 
+        
+        ### END
+
+        vpath, _ = self.astar_planner.Plan(start_id, goal_id)
+        plan = self.extract_plan(vpath)
+        #### BEGIN SOLUTION, let the pid_controller excute the plan ####
+        #### Hint: call `self.pid_controller.execute`, and assign the returned value to a variable called raw_traj ####
+        
+        #### END SOLUTION ####
+        self.bot.arm.core.robot_write_trajectory("group", "arm", "position", raw_traj)
+        t = list(raw_traj[-1].keys())[0]
+        time.sleep(t)
+        if goal_name.split('_')[0] == "dropoff":
+            rospy.set_param('object', 'none')  
+            self.planning_context.publish_dummy_marker()
+        if goal_name.split('_')[0] == "pickup":
+            rospy.set_param('object', goal_name.split('_')[1])  
+            airport.ct.pause_pf()
+        return 
+
+if __name__ == "__main__":
+    try:
+        print("")
+        print("----------------------------------------------------------")
+        print("Welcome to Corneller Airport, Time: 5/07/2051")
+        print("----------------------------------------------------------")
+        print("Press Ctrl-D to exit at any time")
+        print("")
+        print("Initialize Security Robot... ...")
+        airport = Airport()
+        airport.ct.pause_pf()
+        
+        env = Env(0.1, shape="tray")
+        env.publish_obj()
+
+        ###### BEGIN SOLUTION, PICKUP TRAY #######
+        ###### Hint: Call plan_and_execute with goal_name #######
+        
+        ###### END SOLUTION #######
+        ###### BEGIN SOLUTION, DROP TRAY #######
+        ###### Hint: Call plan_and_execute with goal_name #######
+        
+        ###### END SOLUTION #######
+  
+        airport.planning_context.publish_tray_marker()
+
+        airport.ct.resume_pf()
+        env = Env(-0.04, shape="can")
+        env.publish_obj()
+
+        time.sleep(1)
+        ##### BEGIN SOLUTION, get y value of the position of the can from the particle filter####
+        #### Hint: the y value is stored in  airport.planning_context.package_location_y
+        #### You may use abs and np.mean to process it
+        
+        ##### END SOLUTION #####
+
+        if can_position + 0.04 < 0.4:
+            ###### BEGIN SOLUTION, PICKUP CAN #######
+            ###### For pickup, you need to provide the value of target position, which is from the particle filter
+            
+            ###### END SOLUTION #######
+            ###### BEGIN SOLUTION, DROP CAN #######
+            ###### For dropoff, directly call plan_and_execute function
+            
+            ###### END SOLUTION #######
+        else:
+            print("can localization failed, particle filter inaccurate.")
+            exit(1)
+
+  
+        time.sleep(1)
+        airport.ct.resume_pf()
+        env = Env(-0.086, shape="wallet")
+        env.publish_obj()
+
+        time.sleep(1)
+        ##### BEGIN SOLUTION, get y value of the position of the wallet from the particle filter####
+        #### Hint: the y value is stored in  airport.planning_context.package_location_y
+        #### You may use abs and np.mean to process it
+        
+        ###### END SOLUTION #######
+
+        if wallet_position + 0.086 < 0.4:
+            ###### BEGIN SOLUTION, PICKUP WALLET #######
+            ###### For pickup, you need to provide the value of target position, which is from the particle filter
+            
+            ###### END SOLUTION #######
+            ###### BEGIN SOLUTION, DROP WALLET #######
+            ###### For dropoff, directly call plan_and_execute function
+            
+            ###### END SOLUTION #######
+        else:
+            print("wallet localization failed, particle filter inaccurate.")
+            exit(1)
+
+    except rospy.ROSInterruptException:
+        exit(1)
+    except KeyboardInterrupt:
+        exit(1)

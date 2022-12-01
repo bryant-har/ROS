@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/install
+
+Name: arm_final_project
+Description: Description of arm_final_project
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

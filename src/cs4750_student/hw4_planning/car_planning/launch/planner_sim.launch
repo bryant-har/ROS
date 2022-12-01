@@ -1,0 +1,34 @@
+<launch>
+    <arg name="car_name" default="car"/>
+    <arg name="map" default="$(find cs4750)/maps/maze_0.yaml"/>
+    <arg name="initial_x" default="0"/>
+    <arg name="initial_y" default="0"/>
+    <arg name="initial_theta" default="0"/>
+    <arg name="fake_localization" default="true" />
+    <arg name="controller" default="mpc"/>
+    <arg name="teleop" default="true"/>
+    <arg name="rviz" default="true" />
+
+    <arg name="num_vertices" default="200"/>
+    <arg name="connection_radius" default="10.0"/>
+    <arg name="curvature" default="1.0"/>
+
+    <include file="$(find cs4750)/launch/teleop.launch">
+        <arg name="fake_localization" value="$(arg fake_localization)" />
+        <arg name="map" value="$(arg map)"/>
+        <arg name="initial_x" value="$(arg initial_x)"/>
+        <arg name="initial_y" value="$(arg initial_y)"/>
+        <arg name="initial_theta" value="$(arg initial_theta)"/>
+        <arg name="teleop" value="$(arg teleop)" />
+    </include>
+
+    <group ns="$(arg car_name)">
+        <node pkg="car_planning" type="planner" name="planner" output="screen">
+            <param name="num_vertices" value="$(arg num_vertices)"/>
+            <param name="connection_radius" value="$(arg connection_radius)"/>
+            <param name="curvature" value="$(arg curvature)"/>
+        </node>
+    </group>
+
+    <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" args="-d $(find car_planning)/config/planning.rviz"/>
+</launch>

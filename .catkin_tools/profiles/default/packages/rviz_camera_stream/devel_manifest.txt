@@ -2,5 +2,5 @@ cs4750_student/rviz_camera_stream
 /home/bjh254/homework_ws/devel/.private/rviz_camera_stream/cmake.lock /home/bjh254/homework_ws/devel/./cmake.lock
 /home/bjh254/homework_ws/devel/.private/rviz_camera_stream/lib/librviz_camera_stream.so /home/bjh254/homework_ws/devel/lib/librviz_camera_stream.so
 /home/bjh254/homework_ws/devel/.private/rviz_camera_stream/lib/pkgconfig/rviz_camera_stream.pc /home/bjh254/homework_ws/devel/lib/pkgconfig/rviz_camera_stream.pc
-/home/bjh254/homework_ws/devel/.private/rviz_camera_stream/share/rviz_camera_stream/cmake/rviz_camera_streamConfig.cmake /home/bjh254/homework_ws/devel/share/rviz_camera_stream/cmake/rviz_camera_streamConfig.cmake
 /home/bjh254/homework_ws/devel/.private/rviz_camera_stream/share/rviz_camera_stream/cmake/rviz_camera_streamConfig-version.cmake /home/bjh254/homework_ws/devel/share/rviz_camera_stream/cmake/rviz_camera_streamConfig-version.cmake
+/home/bjh254/homework_ws/devel/.private/rviz_camera_stream/share/rviz_camera_stream/cmake/rviz_camera_streamConfig.cmake /home/bjh254/homework_ws/devel/share/rviz_camera_stream/cmake/rviz_camera_streamConfig.cmake

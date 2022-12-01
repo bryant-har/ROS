@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/devel/.private/arm_final_project
+
+Name: arm_final_project
+Description: Description of arm_final_project
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

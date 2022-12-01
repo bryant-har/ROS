@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/install
+
+Name: arm_controller
+Description: Description of arm_controller
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

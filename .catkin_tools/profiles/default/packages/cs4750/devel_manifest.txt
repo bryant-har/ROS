@@ -1,8 +1,8 @@
 cs4750_student/cs4750
 /home/bjh254/homework_ws/devel/.private/cs4750/cmake.lock /home/bjh254/homework_ws/devel/./cmake.lock
-/home/bjh254/homework_ws/devel/.private/cs4750/lib/pkgconfig/cs4750.pc /home/bjh254/homework_ws/devel/lib/pkgconfig/cs4750.pc
-/home/bjh254/homework_ws/devel/.private/cs4750/lib/python3/dist-packages/cs4750/__init__.py /home/bjh254/homework_ws/devel/lib/python3/dist-packages/cs4750/__init__.py
-/home/bjh254/homework_ws/devel/.private/cs4750/share/cs4750/cmake/cs4750Config.cmake /home/bjh254/homework_ws/devel/share/cs4750/cmake/cs4750Config.cmake
-/home/bjh254/homework_ws/devel/.private/cs4750/share/cs4750/cmake/cs4750Config-version.cmake /home/bjh254/homework_ws/devel/share/cs4750/cmake/cs4750Config-version.cmake
 /home/bjh254/homework_ws/devel/.private/cs4750/etc/catkin/profile.d/cs4750.bash /home/bjh254/homework_ws/devel/etc/catkin/profile.d/cs4750.bash
 /home/bjh254/homework_ws/devel/.private/cs4750/etc/catkin/profile.d/cs4750.zsh /home/bjh254/homework_ws/devel/etc/catkin/profile.d/cs4750.zsh
+/home/bjh254/homework_ws/devel/.private/cs4750/lib/pkgconfig/cs4750.pc /home/bjh254/homework_ws/devel/lib/pkgconfig/cs4750.pc
+/home/bjh254/homework_ws/devel/.private/cs4750/lib/python3/dist-packages/cs4750/__init__.py /home/bjh254/homework_ws/devel/lib/python3/dist-packages/cs4750/__init__.py
+/home/bjh254/homework_ws/devel/.private/cs4750/share/cs4750/cmake/cs4750Config-version.cmake /home/bjh254/homework_ws/devel/share/cs4750/cmake/cs4750Config-version.cmake
+/home/bjh254/homework_ws/devel/.private/cs4750/share/cs4750/cmake/cs4750Config.cmake /home/bjh254/homework_ws/devel/share/cs4750/cmake/cs4750Config.cmake

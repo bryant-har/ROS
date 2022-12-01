@@ -1,0 +1,8 @@
+prefix=/home/bjh254/homework_ws/devel/.private/arm_controller
+
+Name: arm_controller
+Description: Description of arm_controller
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,7 @@
+set(arm_final_project_SETUP_PY_SETUP_MODULE "distutils.core")
+set(arm_final_project_SETUP_PY_VERSION "0.0.0")
+set(arm_final_project_SETUP_PY_SCRIPTS "")
+set(arm_final_project_SETUP_PY_PACKAGES "arm_final_project")
+set(arm_final_project_SETUP_PY_PACKAGE_DIRS "src/arm_final_project")
+set(arm_final_project_SETUP_PY_MODULES "")
+set(arm_final_project_SETUP_PY_MODULE_DIRS "")
